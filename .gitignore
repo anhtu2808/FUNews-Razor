@@ -1,0 +1,62 @@
+Visual Studio
+
+.vs/
+*.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+Build folders
+
+/bin/
+/obj/
+/publish/
+
+NuGet packages
+
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+Rider
+
+.idea/
+*.sln.iml
+
+VS Code
+
+.vscode/
+
+ASP.NET Core files
+
+wwwroot/uploads/*
+appsettings.*.json
+
+Entity Framework Core Migrations
+
+*/Migrations/
+
+SQL Server files
+
+*.mdf
+*.ldf
+
+User-specific files
+
+*.rsuser
+*.DotSettings.user
+*.userprefs
+
+Logs and databases
+
+*.log
+*.tlog
+
+OS generated files
+
+.DS_Store
+Thumbs.db
+
+End of .gitignore
