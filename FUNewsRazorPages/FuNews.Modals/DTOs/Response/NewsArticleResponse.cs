@@ -14,6 +14,7 @@ namespace FuNews.Modals.DTOs.Response
         public DateTime? CreatedDate { get; set; }
         public string? NewsContent { get; set; }
         public string? NewsSource { get; set; }
+        public string? UrlThumbnails { get; set; }
         public bool? NewsStatus { get; set; }
     }
 }

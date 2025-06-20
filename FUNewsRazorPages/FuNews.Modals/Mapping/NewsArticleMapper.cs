@@ -13,7 +13,13 @@ namespace FuNews.Modals.Mapping
     {
         public NewsArticleMapper()
         {
-            CreateMap<NewsArticle, NewsArticleResponse>().ReverseMap();
+            CreateMap<NewsArticle, NewsArticleResponse>()
+          .ForMember(dest => dest.UrlThumbnails,
+              opt => opt.MapFrom(src =>
+                  string.IsNullOrEmpty(src.UrlThumbnails)
+                      ? null
+                      : $"/uploads/{src.UrlThumbnails}"
+              ));
         }
     }
 }

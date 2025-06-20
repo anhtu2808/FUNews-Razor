@@ -1,29 +1,31 @@
 ﻿@page
 @model FUNewsRazorPages.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Danh sách bài viết";
 }
 
-<h2>Danh sách bài viết</h2>
+<h2 class="mb-4">📰 Danh sách bài viết</h2>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Headline</th>
-            <th>Created Date</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var news in Model.NewsList)
-        {
-            <tr>
-                <td>@news.NewsTitle</td>
-                <td>@news.Headline</td>
-                <td>@news.CreatedDate?.ToString("yyyy-MM-dd")</td>
-                <td>@(news.NewsStatus == true ? "Active" : "Inactive")</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    @foreach (var news in Model.NewsList)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                @if (!string.IsNullOrEmpty(news.UrlThumbnails))
+                {
+                    <img src="@news.UrlThumbnails" class="card-img-top" style="object-fit:cover; height:180px;" />
+                }
+                <div class="card-body">
+                    <h5 class="card-title text-primary">@news.NewsTitle</h5>
+                    <p class="card-text text-muted">
+                        <small>@news.CreatedDate?.ToString("dd/MM/yyyy")</small>
+                        <span class="badge @(news.NewsStatus == true ? "bg-success" : "bg-secondary") float-end">
+                            @(news.NewsStatus == true ? "Đang hiển thị" : "Đã ẩn")
+                        </span>
+                    </p>
+                    <p class="card-text">@news.Headline</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -4,6 +4,7 @@ using FuNews.DAL;
 using FuNews.DAL.Interface;
 using FuNews.DAL.Repository;
 using FuNews.Modals.Mapping;
+using FUNewsRazorPages.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace FUNewsRazorPages
@@ -29,7 +30,7 @@ namespace FUNewsRazorPages
 
             // Đăng ký AutoMapper
             builder.Services.AddAutoMapper(typeof(NewsArticleMapper).Assembly);
-
+            builder.Services.AddSignalR();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -39,7 +40,7 @@ namespace FUNewsRazorPages
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.MapHub<NewsHub>("/newsHub");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
