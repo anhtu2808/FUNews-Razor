@@ -1,10 +1,29 @@
 ﻿@page
-@model IndexModel
+@model FUNewsRazorPages.Pages.IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>Danh sách bài viết</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Headline</th>
+            <th>Created Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var news in Model.NewsList)
+        {
+            <tr>
+                <td>@news.NewsTitle</td>
+                <td>@news.Headline</td>
+                <td>@news.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                <td>@(news.NewsStatus == true ? "Active" : "Inactive")</td>
+            </tr>
+        }
+    </tbody>
+</table>

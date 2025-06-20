@@ -1,4 +1,9 @@
+﻿using FuNews.BLL.Interface;
+using FuNews.BLL.Service;
 using FuNews.DAL;
+using FuNews.DAL.Interface;
+using FuNews.DAL.Repository;
+using FuNews.Modals.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace FUNewsRazorPages
@@ -15,6 +20,16 @@ namespace FUNewsRazorPages
              options.UseSqlServer(
                  builder.Configuration.GetConnectionString("DefaultConnection")
              ));
+
+            // Đăng ký Repository
+            builder.Services.AddScoped<INewsArticleRepository, NewsArticleRepository>();
+
+            // Đăng ký Service
+            builder.Services.AddScoped<INewsArticleService, NewsArticleService>();
+
+            // Đăng ký AutoMapper
+            builder.Services.AddAutoMapper(typeof(NewsArticleMapper).Assembly);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

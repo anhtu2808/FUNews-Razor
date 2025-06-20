@@ -9,5 +9,7 @@ namespace FuNews.DAL.Interface
 {
     public interface INewsArticleRepository : IBaseRepository<NewsArticle, String>
     {
+        Task<List<NewsArticle>> GetAllNewsByStatus(bool? status);
+
     }
 }
