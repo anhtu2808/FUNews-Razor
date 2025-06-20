@@ -60,3 +60,6 @@ OS generated files
 Thumbs.db
 
 End of .gitignore
+*.cache
+FUNewsRazorPages/FuNews.DAL/obj/Debug/net8.0/FuNews.DAL.AssemblyInfo.cs
+FUNewsRazorPages/FuNews.BLL/obj/Debug/net8.0/FuNews.BLL.AssemblyInfo.cs
