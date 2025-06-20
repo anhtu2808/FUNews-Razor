@@ -1,0 +1,27 @@
+# Build folders
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+
+# Rider project files
+.idea/
+*.sln.iml
+*.DotSettings*
+
+# VSCode settings
+.vscode/
+
+# Auto-generated MSBuild files
+*.cache
+*.AssemblyInfo.cs
+*.AssemblyInfoInputs.cache
+*.GeneratedMSBuildEditorConfig.editorconfig
+*.csproj.nuget.g.*
+
+# NuGet
+project.assets.json
+project.packagespec.json
+project.nuget.cache
