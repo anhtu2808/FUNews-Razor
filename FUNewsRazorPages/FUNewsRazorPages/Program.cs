@@ -24,12 +24,15 @@ namespace FUNewsRazorPages
 
             // Đăng ký Repository
             builder.Services.AddScoped<INewsArticleRepository, NewsArticleRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             // Đăng ký Service
             builder.Services.AddScoped<INewsArticleService, NewsArticleService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             // Đăng ký AutoMapper
             builder.Services.AddAutoMapper(typeof(NewsArticleMapper).Assembly);
+            builder.Services.AddAutoMapper(typeof(CategoryMapper).Assembly);
             builder.Services.AddSignalR();
             var app = builder.Build();
 

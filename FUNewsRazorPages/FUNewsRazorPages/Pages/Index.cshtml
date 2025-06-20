@@ -1,31 +1,70 @@
 ﻿@page
 @model FUNewsRazorPages.Pages.IndexModel
 @{
-    ViewData["Title"] = "Danh sách bài viết";
+	ViewData["Title"] = "Tin tức";
+	var mainArticle = Model.NewsList.FirstOrDefault();
+	var otherArticles = Model.NewsList.Skip(1).ToList();
 }
+<div class="container mt-3">
+	<ul class="nav nav-pills mb-3">
+		<li class="nav-item">
+			<a class="nav-link @(Model.SelectedCategoryId == null ? "active" : "")" asp-page="/Index">Tất cả</a>
+		</li>
+		@foreach (var cat in Model.Categories)
+		{
+			<li class="nav-item">
+				<a class="nav-link @(Model.SelectedCategoryId == cat.CategoryId ? "active" : "")"
+				   asp-page="/Index"
+				   asp-route-SelectedCategoryId="@cat.CategoryId">@cat.CategoryName</a>
+			</li>
+		}
+	</ul>
+</div>
 
-<h2 class="mb-4">📰 Danh sách bài viết</h2>
+<div class="container mt-4">
+	<div class="row align-items-stretch">
+		@if (mainArticle != null)
+		{
+			<div class="col-md-7 d-flex">
+				<div class="card border-0 w-100 h-100">
+					<img src="@mainArticle.UrlThumbnails" class="card-img-top" style="height:350px; object-fit:cover;" />
+					<div class="card-body">
+						<h3 class="card-title fw-bold">@mainArticle.NewsTitle</h3>
+						<p class="text-muted">@mainArticle.CreatedDate?.ToString("dd/MM/yyyy")</p>
+						<p class="card-text">@mainArticle.Headline</p>
+					</div>
+				</div>
+			</div>
+		}
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    @foreach (var news in Model.NewsList)
-    {
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0">
-                @if (!string.IsNullOrEmpty(news.UrlThumbnails))
-                {
-                    <img src="@news.UrlThumbnails" class="card-img-top" style="object-fit:cover; height:180px;" />
-                }
-                <div class="card-body">
-                    <h5 class="card-title text-primary">@news.NewsTitle</h5>
-                    <p class="card-text text-muted">
-                        <small>@news.CreatedDate?.ToString("dd/MM/yyyy")</small>
-                        <span class="badge @(news.NewsStatus == true ? "bg-success" : "bg-secondary") float-end">
-                            @(news.NewsStatus == true ? "Đang hiển thị" : "Đã ẩn")
-                        </span>
-                    </p>
-                    <p class="card-text">@news.Headline</p>
-                </div>
-            </div>
-        </div>
-    }
+		<div class="col-md-5 d-flex flex-column justify-content-between">
+			@foreach (var news in otherArticles.Take(4))
+			{
+				<div class="d-flex mb-3 border-bottom pb-2">
+					<img src="@news.UrlThumbnails" style="width:120px; height:80px; object-fit:cover;" class="me-3 rounded" />
+					<div>
+						<h6 class="mb-1 text-dark">@news.NewsTitle</h6>
+						<small class="text-muted">@news.CreatedDate?.ToString("dd/MM/yyyy")</small>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<div class="container mt-5">
+	<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+		@foreach (var news in otherArticles.Skip(4))
+		{
+			<div class="col">
+				<div class="card h-100 border-0 shadow-sm">
+					<img src="@news.UrlThumbnails" class="card-img-top" style="height:160px; object-fit:cover;" />
+					<div class="card-body">
+						<h6 class="card-title text-dark">@news.NewsTitle</h6>
+						<p class="text-muted mb-0"><small>@news.CreatedDate?.ToString("dd/MM/yyyy")</small></p>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
 </div>

@@ -19,6 +19,7 @@ namespace FuNews.DAL.Repository
         {
             return await _context.NewsArticles
                     .Where(na => na.NewsStatus == status)
+                    .OrderByDescending(na => na.CreatedDate)
                     .ToListAsync();
         }
 
