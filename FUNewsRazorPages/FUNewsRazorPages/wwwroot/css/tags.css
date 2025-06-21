@@ -1,0 +1,231 @@
+/* Tags Management Styles */
+.tags-table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+    border: none;
+}
+
+.tags-table-header th {
+    background: linear-gradient(90deg, #f8f9fa 0%, #e9ecef 100%);
+    border: none;
+    border-bottom: none;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1rem 1.5rem;
+}
+
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table thead th {
+    border-bottom: none;
+}
+
+.table tbody td {
+    border-top: none;
+}
+
+.tags-table-header th i {
+    color: #6c757d;
+}
+
+.tag-row {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+    border-left-color: #17a2b8;
+}
+
+.tag-row:hover {
+    background: linear-gradient(90deg, rgba(23,162,184,0.05) 0%, rgba(23,162,184,0.02) 50%, transparent 100%);
+    transform: translateX(3px);
+}
+
+.tag-row td {
+    border: none;
+    padding: 1rem 1.5rem;
+    vertical-align: middle;
+}
+
+.tag-row:not(:last-child) {
+    position: relative;
+}
+
+.tag-row:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 2rem;
+    right: 2rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(23,162,184,0.1) 10%, rgba(23,162,184,0.3) 50%, rgba(23,162,184,0.1) 90%, transparent 100%);
+    opacity: 0.8;
+}
+
+.tag-content {
+    display: flex;
+    align-items: center;
+}
+
+.tag-icon {
+    font-size: 18px;
+    margin-right: 12px;
+    color: #17a2b8;
+}
+
+.tag-name {
+    font-weight: 600;
+    color: #343a40;
+    font-size: 16px;
+}
+
+.tag-note {
+    color: #6c757d;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.action-btn {
+    background: transparent;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 0 2px;
+    transition: all 0.2s ease;
+    color: #6c757d;
+}
+
+.edit-btn:hover {
+    border-color: #007bff;
+    color: #007bff;
+    background: rgba(0,123,255,0.1);
+    transform: translateY(-1px);
+}
+
+.delete-btn:hover {
+    border-color: #dc3545;
+    color: #dc3545;
+    background: rgba(220,53,69,0.1);
+    transform: translateY(-1px);
+}
+
+.empty-state {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(23, 162, 184, 0.3);
+}
+
+.header-section {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    color: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(23, 162, 184, 0.3);
+}
+
+.btn-create {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-create:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+    background: linear-gradient(45deg, #20c997, #28a745);
+}
+
+/* Tag badge styling */
+.tag-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(45deg, #17a2b8, #20c997);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 2px;
+    box-shadow: 0 2px 8px rgba(23, 162, 184, 0.3);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .header-section {
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    .header-section .d-flex {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .tag-name {
+        font-size: 14px;
+    }
+    
+    .btn-create {
+        padding: 0.6rem 1.5rem;
+        font-size: 14px;
+    }
+    
+    .tag-row td {
+        padding: 0.75rem 1rem;
+    }
+    
+    .tags-table-header th {
+        padding: 0.75rem 1rem;
+    }
+}
+
+/* Animation for new items */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tag-row {
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+/* Loading state */
+.loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+} 

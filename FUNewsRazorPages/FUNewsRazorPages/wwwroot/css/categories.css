@@ -1,0 +1,260 @@
+/* Category Tree View Styles */
+.tree-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+    border: none;
+}
+
+.tree-header {
+    background: linear-gradient(90deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid #e9ecef;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #495057;
+}
+
+.tree-header i {
+    color: #6c757d;
+}
+
+.tree-body {
+    padding: 0;
+}
+
+.tree-item {
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+    position: relative;
+}
+
+.tree-item:hover {
+    background: linear-gradient(90deg, rgba(0,123,255,0.05) 0%, rgba(0,123,255,0.02) 50%, transparent 100%);
+    transform: translateX(3px);
+    border-radius: 0 8px 8px 0;
+}
+
+.tree-node {
+    display: flex;
+    align-items: center;
+}
+
+.tree-lines {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.tree-connector, .tree-pipe {
+    color: #adb5bd;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+}
+
+.tree-pipe {
+    height: 100%;
+    position: relative;
+}
+
+.node-content {
+    display: flex;
+    align-items: center;
+}
+
+.node-icon {
+    font-size: 18px;
+    margin-right: 8px;
+}
+
+.folder-icon {
+    color: #f39c12;
+}
+
+.file-icon {
+    color: #3498db;
+}
+
+.node-name {
+    font-weight: 600;
+    color: #343a40;
+    font-size: 15px;
+}
+
+.node-description .description-text {
+    color: #6c757d;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.action-btn {
+    background: transparent;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 0 2px;
+    transition: all 0.2s ease;
+    color: #6c757d;
+}
+
+.edit-btn:hover {
+    border-color: #007bff;
+    color: #007bff;
+    background: rgba(0,123,255,0.1);
+    transform: translateY(-1px);
+}
+
+.delete-btn:hover {
+    border-color: #dc3545;
+    color: #dc3545;
+    background: rgba(220,53,69,0.1);
+    transform: translateY(-1px);
+}
+
+/* Level-based color coding */
+.level-0 { 
+    border-left-color: #007bff; 
+}
+.level-1 { 
+    border-left-color: #28a745;
+}
+.level-2 { 
+    border-left-color: #ffc107;
+}
+.level-3 { 
+    border-left-color: #dc3545;
+}
+.level-4 { 
+    border-left-color: #6610f2;
+}
+
+.empty-state {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.header-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.btn-create {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-create:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+    background: linear-gradient(45deg, #20c997, #28a745);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .header-section {
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    .header-section .d-flex {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .tree-connector, .tree-pipe {
+        font-size: 14px;
+        width: 16px;
+    }
+    
+    .node-name {
+        font-size: 14px;
+    }
+    
+    .btn-create {
+        padding: 0.6rem 1.5rem;
+        font-size: 14px;
+    }
+    
+    .tree-item {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Animation for new items */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tree-item {
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+/* Loading state */
+.loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+} 

@@ -4,51 +4,103 @@
     ViewData["Title"] = "Tags";
 }
 
-<h2 class="mb-3">Tags</h2>
-<p>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTagModal">
-        <i class="bi bi-plus-circle me-1"></i>Create New
-    </button>
-</p>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Tag Name</th>
-            <th>Note</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model.Tags)
-    {
-        <tr>
-            <td>@item.TagName</td>
-            <td>@item.Note</td>
-            <td>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-outline-primary btn-sm" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#editTagModal" 
-                            data-tag-id="@item.TagId"
-                            data-tag-name="@item.TagName"
-                            data-tag-note="@item.Note"
-                            title="Edit">
-                        <i class="bi bi-pencil"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-danger btn-sm" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#deleteTagModal"
-                            data-tag-id="@item.TagId"
-                            data-tag-name="@item.TagName"
-                            title="Delete">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </div>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+@section Styles {
+    <link rel="stylesheet" href="~/css/tags.css" />
+}
+
+<div class="header-section">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="mb-2">
+                <i class="bi bi-tags-fill me-2"></i>Tag Management
+            </h2>
+            <p class="mb-0 opacity-75">Organize and categorize your content with tags</p>
+        </div>
+        <button type="button" class="btn btn-create" data-bs-toggle="modal" data-bs-target="#createTagModal">
+            <i class="bi bi-plus-circle me-2"></i>Create New Tag
+        </button>
+    </div>
+</div>
+
+@if (Model.Tags.Any())
+{
+    <div class="tags-table-container">
+        <table class="table table-hover mb-0">
+            <thead class="tags-table-header">
+                <tr>
+                    <th style="width: 30%;">
+                        <i class="bi bi-tag-fill me-2 text-info"></i>Tag Name
+                    </th>
+                    <th style="width: 55%;">
+                        <i class="bi bi-file-text me-2 text-info"></i>Description / Note
+                    </th>
+                    <th style="width: 15%;" class="text-center">
+                        <i class="bi bi-gear me-2"></i>Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Tags)
+                {
+                    <tr class="tag-row">
+                        <td>
+                            <div class="tag-content">
+                                <i class="bi bi-tag-fill tag-icon"></i>
+                                <span class="tag-name">@item.TagName</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="tag-description">
+                                @if (!string.IsNullOrEmpty(item.Note))
+                                {
+                                    <span class="tag-note" title="@item.Note">
+                                        @(item.Note.Length > 100 ? item.Note.Substring(0, 100) + "..." : item.Note)
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted fst-italic">No description</span>
+                                }
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="tag-actions">
+                                <button type="button" class="action-btn edit-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#editTagModal" 
+                                        data-tag-id="@item.TagId"
+                                        data-tag-name="@item.TagName"
+                                        data-tag-note="@item.Note"
+                                        title="Edit Tag">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button type="button" class="action-btn delete-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteTagModal"
+                                        data-tag-id="@item.TagId"
+                                        data-tag-name="@item.TagName"
+                                        title="Delete Tag">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="empty-state">
+        <i class="bi bi-tags display-1 mb-3" style="font-size: 4rem;"></i>
+        <h4 class="mb-3">No Tags Yet</h4>
+        <p class="mb-4 opacity-75">Start organizing your content by creating tags. Tags help categorize and filter your news articles effectively.</p>
+        <button type="button" class="btn btn-light btn-lg" data-bs-toggle="modal" data-bs-target="#createTagModal">
+            <i class="bi bi-plus-circle me-2"></i>Create Your First Tag
+        </button>
+    </div>
+}
 
 @* Include Modal Partials *@
 <partial name="_EditModal" />

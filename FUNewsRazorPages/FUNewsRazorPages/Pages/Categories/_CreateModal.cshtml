@@ -1,0 +1,57 @@
+@model FUNewsRazorPages.Pages.Categories.IndexModel
+
+<!-- Create Category Modal -->
+<div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Create" id="createCategoryForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createCategoryModalLabel">
+                        <i class="bi bi-plus-circle me-2"></i>Create New Category
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="createCategoryName" class="form-label">Category Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="createCategoryName" name="Category.CategoryName" required maxlength="100" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createCategoryDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="createCategoryDescription" name="Category.CategoryDescription" rows="3" maxlength="500"></textarea>
+                        <div class="form-text">Optional description for this category</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createParentCategoryId" class="form-label">Parent Category</label>
+                        <select class="form-select" id="createParentCategoryId" name="Category.ParentCategoryId">
+                            <option value="">-- Root Category --</option>
+                            @foreach (var parentCategory in Model.ParentCategories)
+                            {
+                                <option value="@parentCategory.CategoryId">@parentCategory.CategoryName</option>
+                            }
+                        </select>
+                        <div class="form-text">Leave empty to create a root category</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="createIsActive" name="Category.IsActive" value="true" checked />
+                            <input type="hidden" name="Category.IsActive" value="false" />
+                            <label class="form-check-label" for="createIsActive">
+                                Active
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-1"></i>Create Category
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
