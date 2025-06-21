@@ -6,7 +6,9 @@
 
 <h2 class="mb-3">Tags</h2>
 <p>
-    <a asp-page="Create" class="btn btn-primary">Create New</a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTagModal">
+        <i class="bi bi-plus-circle me-1"></i>Create New
+    </button>
 </p>
 <table class="table table-striped">
     <thead>
@@ -23,11 +25,36 @@
             <td>@item.TagName</td>
             <td>@item.Note</td>
             <td>
-                <a asp-page="Edit" asp-route-id="@item.TagId">Edit</a> |
-                <a asp-page="Details" asp-route-id="@item.TagId">Details</a> |
-                <a asp-page="Delete" asp-route-id="@item.TagId">Delete</a>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary btn-sm" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editTagModal" 
+                            data-tag-id="@item.TagId"
+                            data-tag-name="@item.TagName"
+                            data-tag-note="@item.Note"
+                            title="Edit">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#deleteTagModal"
+                            data-tag-id="@item.TagId"
+                            data-tag-name="@item.TagName"
+                            title="Delete">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
             </td>
         </tr>
     }
     </tbody>
 </table>
+
+@* Include Modal Partials *@
+<partial name="_EditModal" />
+<partial name="_CreateModal" />
+<partial name="_DeleteModal" />
+
+@section Scripts {
+    <script src="~/js/tags.js"></script>
+}

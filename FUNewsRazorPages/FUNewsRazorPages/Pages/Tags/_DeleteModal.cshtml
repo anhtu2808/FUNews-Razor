@@ -1,0 +1,27 @@
+<!-- Delete Tag Modal -->
+<div class="modal fade" id="deleteTagModal" tabindex="-1" aria-labelledby="deleteTagModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Delete" id="deleteTagForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTagModalLabel">
+                        <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Delete Tag
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the tag <strong id="deleteTagName"></strong>?</p>
+                    <p class="text-muted">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
