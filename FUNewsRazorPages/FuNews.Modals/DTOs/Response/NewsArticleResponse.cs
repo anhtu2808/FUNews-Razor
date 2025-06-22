@@ -16,5 +16,9 @@ namespace FuNews.Modals.DTOs.Response
         public string? NewsSource { get; set; }
         public string? UrlThumbnails { get; set; }
         public bool? NewsStatus { get; set; }
+        public string? CategoryName { get; set; }
+        public List<string>? TagNames { get; set; }
+        public string? AuthorName { get; set; }
+
     }
 }

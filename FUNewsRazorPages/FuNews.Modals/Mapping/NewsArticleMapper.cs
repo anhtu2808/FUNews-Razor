@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FuNews.Modals.DTOs.Request;
 using FuNews.Modals.DTOs.Response;
 using FuNews.Modals.Entity;
 using System;
@@ -14,12 +15,18 @@ namespace FuNews.Modals.Mapping
         public NewsArticleMapper()
         {
             CreateMap<NewsArticle, NewsArticleResponse>()
-          .ForMember(dest => dest.UrlThumbnails,
-              opt => opt.MapFrom(src =>
-                  string.IsNullOrEmpty(src.UrlThumbnails)
-                      ? null
-                      : $"/uploads/{src.UrlThumbnails}"
-              ));
-        }
+                .ForMember(dest => dest.UrlThumbnails,
+                    opt => opt.MapFrom(src =>string.IsNullOrEmpty(src.UrlThumbnails) ? null : $"/uploads/{src.UrlThumbnails}"))
+                .ForMember(dest => dest.CategoryName, opt =>
+                    opt.MapFrom(src => src.Category != null ? src.Category.CategoryName : "N/A"))
+                .ForMember(dest => dest.TagNames, opt =>
+                    opt.MapFrom(src => src.NewsTags != null ? src.NewsTags.Select(nt => nt.Tag.TagName).ToList() : new List<string>()))
+                .ForMember(dest => dest.AuthorName, opt =>
+                    opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy.AccountName : "N/A"));
+
+            CreateMap<CreateNewsArticleRequest, NewsArticle>();
+
+
+		}
     }
 }

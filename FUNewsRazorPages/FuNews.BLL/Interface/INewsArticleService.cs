@@ -1,5 +1,6 @@
 ﻿using FuNews.Modals.DTOs.Response;
 using FuNews.Modals.Entity;
+using FuNews.Modals.DTOs.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace FuNews.BLL.Interface
     public interface INewsArticleService : IBaseService<NewsArticle, String>
     {
         Task<List<NewsArticleResponse>> GetAllNews(bool? status);
-    }
+
+		Task<NewsArticleResponse> CreateNews(CreateNewsArticleRequest request);
+	}
 }

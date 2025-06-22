@@ -4,7 +4,7 @@ using FuNews.DAL;
 using FuNews.DAL.Interface;
 using FuNews.DAL.Repository;
 using FuNews.Modals.Mapping;
-using FUNewsRazorPages.SignalR;
+using FUNewsRazorPages.SignalR.NewsArticle;
 using Microsoft.EntityFrameworkCore;
 
 namespace FUNewsRazorPages
@@ -29,6 +29,8 @@ namespace FUNewsRazorPages
             // Đăng ký Service
             builder.Services.AddScoped<INewsArticleService, NewsArticleService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<INewsHubService, NewsHubService>();
+
 
             // Đăng ký AutoMapper
             builder.Services.AddAutoMapper(typeof(NewsArticleMapper).Assembly);
