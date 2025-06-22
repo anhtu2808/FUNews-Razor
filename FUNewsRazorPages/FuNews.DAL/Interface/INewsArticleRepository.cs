@@ -11,5 +11,15 @@ namespace FuNews.DAL.Interface
     {
         Task<List<NewsArticle>> GetAllNewsByStatus(bool? status);
         Task<NewsArticle> GetById(String id);
+        Task<int> GetTotalPublic();
+        Task<int> GetTotalPending();
+
+        Task<int> CountNewsByCategory(short categoryId);
+
+        Task<int> GetTotalPublic(DateTime start, DateTime end);
+        Task<int> GetTotalPending(DateTime start, DateTime end);
+
+        Task<int> CountNewsByCategory(short categoryId, DateTime start, DateTime end);
+
     }
 }

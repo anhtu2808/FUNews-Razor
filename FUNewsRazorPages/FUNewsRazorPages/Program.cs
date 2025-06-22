@@ -32,7 +32,7 @@ namespace FUNewsRazorPages
             builder.Services.AddScoped<ITagService, TagService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<INewsHubService, NewsHubService>();
-
+            builder.Services.AddScoped<IDashboardService, DashboardService>();
 
             // Đăng ký AutoMapper
             builder.Services.AddAutoMapper(typeof(NewsArticleMapper).Assembly);

@@ -14,5 +14,7 @@ namespace FuNews.DAL.Interface
         Task DeleteNewsTag(String id);
         Task UpdateNewsTag(String id, List<int> tagIds);
         Task<List<NewsTag>> GetAllByNewsIdAsync(String id);
+        Task<int> CountNewsByTag(int tagId);
+        Task<int> CountNewsByTag(int tagId, DateTime start, DateTime end);
     }
 }

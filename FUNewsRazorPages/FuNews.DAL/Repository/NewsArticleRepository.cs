@@ -15,6 +15,20 @@ namespace FuNews.DAL.Repository
         {
         }
 
+        public Task<int> CountNewsByCategory(short categoryId)
+        {
+            return _context.NewsArticles
+                .Where(na => na.CategoryId == categoryId && na.NewsStatus == true)
+                .CountAsync();
+        }
+
+        public Task<int> CountNewsByCategory(short categoryId, DateTime start, DateTime end)
+        {
+            return _context.NewsArticles
+               .Where(na => na.CategoryId == categoryId && na.NewsStatus == true && (na.CreatedDate >= start && na.CreatedDate <= end))
+               .CountAsync();
+        }
+
         public async Task<List<NewsArticle>> GetAllNewsByStatus(bool? status)
         {
             return await _context.NewsArticles
@@ -31,5 +45,32 @@ namespace FuNews.DAL.Repository
                     .FirstAsync(na => na.NewsArticleId == id);
         }
 
+        public Task<int> GetTotalPending()
+        {
+            return _context.NewsArticles
+                .Where(na => na.NewsStatus == false)
+                .CountAsync();
+        }
+
+        public Task<int> GetTotalPending(DateTime start, DateTime end)
+        {
+            return _context.NewsArticles
+                 .Where(na => na.NewsStatus == false && (na.CreatedDate >= start && na.CreatedDate <= end))
+                 .CountAsync();
+        }
+
+        public Task<int> GetTotalPublic()
+        {
+            return _context.NewsArticles
+              .Where(na => na.NewsStatus == true)
+              .CountAsync();
+        }
+
+        public Task<int> GetTotalPublic(DateTime start, DateTime end)
+        {
+            return _context.NewsArticles
+             .Where(na => na.NewsStatus == true && (na.CreatedDate >= start && na.CreatedDate <= end))
+             .CountAsync();
+        }
     }
 }

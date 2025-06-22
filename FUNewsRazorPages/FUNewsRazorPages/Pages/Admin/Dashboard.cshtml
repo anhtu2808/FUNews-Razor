@@ -1,0 +1,189 @@
+﻿@page
+@model FUNewsRazorPages.Pages.Dashboard.DashboardModel
+@{
+}
+
+<div class="container my-4">
+    <h2 class="mb-4 text-primary"><i class="bi bi-speedometer2"></i>Dashboard</h2>
+
+    <form method="get" class="row g-3 align-items-end mb-4">
+        <div class="col-auto">
+            <label for="startDate" class="form-label fw-semibold">Start Date</label>
+            <input type="date"
+                   class="form-control"
+                   id="startDate"
+                   name="startDate"
+                   value="@Model.startDate?.ToString("yyyy-MM-dd")"
+                   max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-auto">
+            <label for="endDate" class="form-label fw-semibold">End Date</label>
+            <input type="date"
+                   class="form-control"
+                   id="endDate"
+                   name="endDate"
+                   value="@Model.endDate?.ToString("yyyy-MM-dd")"
+                   max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-funnel-fill me-1"></i> Filter
+            </button>
+        </div>
+    </form>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+        <div class="col">
+            <div class="card border-start border-4 border-success shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-success"><i class="bi bi-check-circle-fill me-2"></i>Public Articles</h5>
+                    <p class="display-6 fw-bold">@Model.TotalPublic</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-start border-4 border-warning shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-warning"><i class="bi bi-hourglass-split me-2"></i>Pending Articles</h5>
+                    <p class="display-6 fw-bold">@Model.TotalPending</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4 p-3">
+        <div class="row g-4">
+            <h3 class="text-center mb-3">Articles by Category</h3>
+            <!-- Pie Chart -->
+            <div class="col-md-6">
+                <canvas id="categoryPieChart" style="width:100%; max-height:300px;"></canvas>
+            </div>
+
+            <!-- Bar Chart -->
+            <div class="col-md-6">
+                <canvas id="articlesBarChart" style="width:100%; max-height:300px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow-sm mb-4 p-3">
+        <div class="row g-4">
+            <h3 class="text-center mb-3">Articles by Tag</h3>
+            <!-- Pie Chart Tags -->
+            <div class="col-md-6">
+                
+                <canvas id="tagPieChart" style="width:100%; max-height:300px;"></canvas>
+            </div>
+
+            <!-- Bar Chart Tags -->
+            <div class="col-md-6">   
+                <canvas id="tagBarChart" style="width:100%; max-height:300px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const categoryLabels = @Html.Raw(Json.Serialize(Model.CategoryNames));
+        const categoryCounts = @Html.Raw(Json.Serialize(Model.CategoryCounts));
+        const tagLabels = @Html.Raw(Json.Serialize(Model.TagNames));
+        const tagCounts = @Html.Raw(Json.Serialize(Model.TagCounts));
+
+        // Hàm tạo màu khác nhau (offset giúp tách tag/category)
+        function generateColors(offsetHue, count) {
+            const colors = [];
+            for (let i = 0; i < count; i++) {
+                const hue = (offsetHue + (360 / count) * i) % 360;
+                colors.push(`hsl(${hue}, 70%, 60%)`);
+            }
+            return colors;
+        }
+
+        const categoryColors = generateColors(0, categoryLabels.length);
+        const tagColors = generateColors(180, tagLabels.length);
+
+        // ===== PIE CHART - CATEGORY =====
+        new Chart(document.getElementById('categoryPieChart'), {
+            type: 'pie',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryCounts,
+                    backgroundColor: categoryColors
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // ===== BAR CHART - CATEGORY =====
+        new Chart(document.getElementById('articlesBarChart'), {
+            type: 'bar',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    label: "Total Articles",
+                    data: categoryCounts,
+                    backgroundColor: categoryColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // ===== PIE CHART - TAGS =====
+        new Chart(document.getElementById('tagPieChart'), {
+            type: 'pie',
+            data: {
+                labels: tagLabels,
+                datasets: [{
+                    data: tagCounts,
+                    backgroundColor: tagColors
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // ===== BAR CHART - TAGS =====
+        new Chart(document.getElementById('tagBarChart'), {
+            type: 'bar',
+            data: {
+                labels: tagLabels,
+                datasets: [{
+                    label: "Total Articles",
+                    data: tagCounts,
+                    backgroundColor: tagColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+}

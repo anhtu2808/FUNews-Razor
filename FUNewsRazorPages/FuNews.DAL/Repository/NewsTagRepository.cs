@@ -20,6 +20,22 @@ namespace FuNews.DAL.Repository
             _dbSet = _context.Set<NewsTag>();
         }
 
+        public Task<int> CountNewsByTag(int tagId)
+        {
+            return _context.NewsTags
+                .Where(nt => nt.TagId == tagId && nt.NewsArticle != null
+                     && nt.NewsArticle.NewsStatus == true)
+                .CountAsync();
+        }
+
+        public Task<int> CountNewsByTag(int tagId, DateTime start, DateTime end)
+        {
+            return _context.NewsTags
+                .Where(nt => nt.TagId == tagId && nt.NewsArticle != null
+                     && nt.NewsArticle.NewsStatus == true && (nt.NewsArticle.CreatedDate >= start && nt.NewsArticle.CreatedDate <= end))
+                .CountAsync();
+        }
+
         public async Task CreateNewsTag(String id, List<int> tagIds)
         {
             foreach (var tag in tagIds)
