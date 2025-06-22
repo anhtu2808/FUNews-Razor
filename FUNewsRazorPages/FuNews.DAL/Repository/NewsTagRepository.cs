@@ -22,9 +22,9 @@ namespace FuNews.DAL.Repository
 
         public async Task CreateNewsTag(String id, List<int> tagIds)
         {
-            foreach (var tag in tagIds) 
+            foreach (var tag in tagIds)
             {
-                NewsTag newsTag = new() 
+                NewsTag newsTag = new()
                 {
                     NewsArticleId = id,
                     TagId = tag
@@ -37,8 +37,11 @@ namespace FuNews.DAL.Repository
         public async Task DeleteNewsTag(String id)
         {
             var tagsToRemove = await GetAllByNewsIdAsync(id);
-            _context.NewsTags.RemoveRange(tagsToRemove);
-            await _context.SaveChangesAsync();
+            if (tagsToRemove != null)
+            {
+                _context.NewsTags.RemoveRange(tagsToRemove);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<List<NewsTag>> GetAllByNewsIdAsync(String id)
@@ -46,6 +49,21 @@ namespace FuNews.DAL.Repository
             return await _context.NewsTags
                 .Where(nt => nt.NewsArticleId == id)
                 .ToListAsync();
+        }
+
+        public async Task UpdateNewsTag(String id, List<int> tagIds)
+        {
+            await DeleteNewsTag(id);
+            foreach (var tag in tagIds)
+            {
+                NewsTag newsTag = new()
+                {
+                    NewsArticleId = id,
+                    TagId = tag
+                };
+                await _dbSet.AddAsync(newsTag);
+            }
+            await _context.SaveChangesAsync();
         }
 
     }

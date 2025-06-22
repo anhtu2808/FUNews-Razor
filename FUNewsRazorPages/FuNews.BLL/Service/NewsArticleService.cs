@@ -83,5 +83,14 @@ namespace FuNews.BLL.Service
 
             return response;
         }
+
+        public async Task<NewsArticleResponse> UpdateNews(UpdateNewsArticleRequest request)
+        {
+            NewsArticle newsArticle = await _newsArticleRepository.GetById(request.NewsArticleId);
+            await _newsTagRepository.UpdateNewsTag(newsArticle.NewsArticleId, request.TagIds);
+            await _newsArticleRepository.UpdateAsync(_mapper.Map(request, newsArticle));
+            return _mapper.Map<NewsArticleResponse>(newsArticle);
+        }
+
     }
 }

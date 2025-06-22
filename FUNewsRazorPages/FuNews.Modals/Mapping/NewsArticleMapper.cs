@@ -26,7 +26,8 @@ namespace FuNews.Modals.Mapping
 
             CreateMap<CreateNewsArticleRequest, NewsArticle>();
             CreateMap<NewsArticle, UpdateNewsArticleResponse>();
-                
+            CreateMap<UpdateNewsArticleRequest, NewsArticle>()
+                   .ForMember(dest => dest.NewsArticleId, opt => opt.Ignore());
 
         }
     }

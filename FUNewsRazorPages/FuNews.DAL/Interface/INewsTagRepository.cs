@@ -12,6 +12,7 @@ namespace FuNews.DAL.Interface
 
         Task CreateNewsTag(String id, List<int> tagIds);
         Task DeleteNewsTag(String id);
+        Task UpdateNewsTag(String id, List<int> tagIds);
         Task<List<NewsTag>> GetAllByNewsIdAsync(String id);
     }
 }

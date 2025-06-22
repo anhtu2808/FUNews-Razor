@@ -81,17 +81,17 @@ namespace FUNewsRazorPages.Pages.NewsArticle
             return new JsonResult(news, options);
         }
 
-        //public async Task<IActionResult> OnPostEditAsync()
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        await OnGetAsync();
-        //        return Page();
-        //    }
+        public async Task<IActionResult> OnPostEditAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                await OnGetAsync();
+                return Page();
+            }
 
-        //    await _newsArticleService.UpdateNews(EditInput);
-        //    await _hub.Clients.All.SendAsync("ReceiveNewsChange", "edited");
-        //    return RedirectToPage("ManageNews");
-        //}
+            await _newsArticleService.UpdateNews(EditInput);
+            await _hub.Clients.All.SendAsync("ReceiveNewsChange", "edited");
+            return RedirectToPage("ManageNews");
+        }
     }
 }

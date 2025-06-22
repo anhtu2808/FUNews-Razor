@@ -19,6 +19,7 @@ namespace FuNews.BLL.Interface
 
         Task<NewsArticleResponse> GetNewsById(String id);
         Task<UpdateNewsArticleResponse> GetNewsByIdToUpdate(String id);
+        Task<NewsArticleResponse> UpdateNews(UpdateNewsArticleRequest request);
 
     }
 }
