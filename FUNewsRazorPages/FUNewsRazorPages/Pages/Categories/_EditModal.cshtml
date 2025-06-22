@@ -1,0 +1,58 @@
+@model FUNewsRazorPages.Pages.Categories.IndexModel
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Edit" id="editCategoryForm">
+                <input type="hidden" id="editCategoryId" name="id" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCategoryModalLabel">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Category
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editCategoryName" class="form-label">Category Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editCategoryName" name="Category.CategoryName" required maxlength="100" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCategoryDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editCategoryDescription" name="Category.CategoryDescription" rows="3" maxlength="500"></textarea>
+                        <div class="form-text">Optional description for this category</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editParentCategoryId" class="form-label">Parent Category</label>
+                        <select class="form-select" id="editParentCategoryId" name="Category.ParentCategoryId">
+                            <option value="">-- Root Category --</option>
+                            @foreach (var parentCategory in Model.ParentCategories)
+                            {
+                                <option value="@parentCategory.CategoryId">@parentCategory.CategoryName</option>
+                            }
+                        </select>
+                        <div class="form-text">Select parent category or leave empty for root level</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="editIsActive" name="Category.IsActive" value="true" />
+                            <input type="hidden" name="Category.IsActive" value="false" />
+                            <label class="form-check-label" for="editIsActive">
+                                Active
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-1"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 

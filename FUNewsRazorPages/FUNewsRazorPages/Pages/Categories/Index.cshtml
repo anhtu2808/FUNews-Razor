@@ -1,0 +1,157 @@
+@page
+@model FUNewsRazorPages.Pages.Categories.IndexModel
+@{
+    ViewData["Title"] = "Categories";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/categories.css" />
+}
+
+<div class="header-section">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="mb-2">
+                <i class="bi bi-diagram-3-fill me-2"></i>Category Management
+            </h2>
+            <p class="mb-0 opacity-75">Organize your content with hierarchical categories</p>
+        </div>
+        <button type="button" class="btn btn-create" data-bs-toggle="modal" data-bs-target="#createCategoryModal">
+            <i class="bi bi-plus-circle me-2"></i>Create New Category
+        </button>
+    </div>
+</div>
+
+@if (Model.Categories.Any())
+{
+    <div class="tree-container">
+        <div class="tree-header">
+            <div class="row">
+                <div class="col-5">
+                    <i class="bi bi-folder-fill me-2 text-warning"></i>Category Structure
+                </div>
+                <div class="col-3">
+                    <i class="bi bi-file-text me-2 text-info"></i>Description
+                </div>
+                <div class="col-2">
+                    <i class="bi bi-toggle-on me-2 text-success"></i>Status
+                </div>
+                <div class="col-2 text-center">
+                    <i class="bi bi-gear me-2"></i>Actions
+                </div>
+            </div>
+        </div>
+        
+        <div class="tree-body">
+            @foreach (var item in Model.Categories)
+            {
+                <div class="tree-item level-@(Math.Min(item.Level, 4))" data-level="@item.Level">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <div class="tree-node">
+                                @if (item.Level > 0)
+                                {
+                                    <div class="tree-lines">
+                                        @for (int i = 0; i < item.Level; i++)
+                                        {
+                                            @if (i == item.Level - 1)
+                                            {
+                                                <span class="tree-connector">└─</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="tree-pipe">&nbsp;&nbsp;&nbsp;</span>
+                                            }
+                                        }
+                                    </div>
+                                }
+                                
+                                <div class="node-content">
+                                    <i class="bi bi-folder-fill node-icon folder-icon"></i>
+                                    <span class="node-name">@item.CategoryName</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-3">
+                            <div class="node-description">
+                                @if (!string.IsNullOrEmpty(item.CategoryDescription))
+                                {
+                                    <span class="description-text" title="@item.CategoryDescription">
+                                        @(item.CategoryDescription.Length > 40 ? item.CategoryDescription.Substring(0, 40) + "..." : item.CategoryDescription)
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted fst-italic">—</span>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="col-2">
+                            <div class="node-status">
+                                @if (item.IsActive == true)
+                                {
+                                    <span class="status-badge active">
+                                        <i class="bi bi-check-circle"></i>Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge inactive">
+                                        <i class="bi bi-pause-circle"></i>Inactive
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="col-2">
+                            <div class="node-actions text-center">
+                                <button type="button" class="action-btn edit-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#editCategoryModal" 
+                                        data-category-id="@item.CategoryId"
+                                        data-category-name="@item.CategoryName"
+                                        data-category-description="@item.CategoryDescription"
+                                        data-parent-category-id="@item.ParentCategoryId"
+                                        data-is-active="@item.IsActive"
+                                        title="Edit Category">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button type="button" class="action-btn delete-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteCategoryModal"
+                                        data-category-id="@item.CategoryId"
+                                        data-category-name="@item.CategoryName"
+                                        data-has-children="@item.HasChildren"
+                                        title="Delete Category">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="empty-state">
+        <i class="bi bi-folder2-open display-1 mb-3" style="font-size: 4rem;"></i>
+        <h4 class="mb-3">No Categories Yet</h4>
+        <p class="mb-4 opacity-75">Start organizing your content by creating your first category. Categories help structure your news articles in a hierarchical way.</p>
+        <button type="button" class="btn btn-light btn-lg" data-bs-toggle="modal" data-bs-target="#createCategoryModal">
+            <i class="bi bi-plus-circle me-2"></i>Create Your First Category
+        </button>
+    </div>
+}
+
+@* Include Modal Partials *@
+<partial name="_CreateModal" />
+<partial name="_EditModal" />
+<partial name="_DeleteModal" />
+
+@section Scripts {
+    <script src="~/js/categories.js"></script>
+} 

@@ -1,0 +1,33 @@
+<!-- Create Tag Modal -->
+<div class="modal fade" id="createTagModal" tabindex="-1" aria-labelledby="createTagModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Create" id="createTagForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createTagModalLabel">
+                        <i class="bi bi-plus-circle me-2"></i>Create New Tag
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="createTagName" class="form-label">Tag Name</label>
+                        <input type="text" class="form-control" id="createTagName" name="Tag.TagName" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="createTagNote" class="form-label">Note</label>
+                        <input type="text" class="form-control" id="createTagNote" name="Tag.Note" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-1"></i>Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 

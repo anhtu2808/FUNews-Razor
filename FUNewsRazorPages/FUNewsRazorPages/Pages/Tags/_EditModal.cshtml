@@ -1,0 +1,34 @@
+<!-- Edit Tag Modal -->
+<div class="modal fade" id="editTagModal" tabindex="-1" aria-labelledby="editTagModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Edit" id="editTagForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTagModalLabel">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Tag
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editTagId" name="id" />
+                    <div class="mb-3">
+                        <label for="editTagName" class="form-label">Tag Name</label>
+                        <input type="text" class="form-control" id="editTagName" name="Tag.TagName" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTagNote" class="form-label">Note</label>
+                        <input type="text" class="form-control" id="editTagNote" name="Tag.Note" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-1"></i>Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
