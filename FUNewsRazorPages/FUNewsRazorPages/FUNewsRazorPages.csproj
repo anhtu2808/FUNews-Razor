@@ -18,4 +18,8 @@
     <ProjectReference Include="..\FuNews.BLL\FuNews.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Profile\" />
+  </ItemGroup>
+
 </Project>

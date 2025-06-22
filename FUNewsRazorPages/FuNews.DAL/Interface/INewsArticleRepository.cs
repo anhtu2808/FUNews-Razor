@@ -9,7 +9,7 @@ namespace FuNews.DAL.Interface
 {
     public interface INewsArticleRepository : IBaseRepository<NewsArticle, String>
     {
-        Task<List<NewsArticle>> GetAllNewsByStatus(bool? status);
+        Task<List<NewsArticle>> GetAllNewsByStatusAndCategory(bool? status, short categoryId);
         Task<NewsArticle> GetById(String id);
         Task<int> GetTotalPublic();
         Task<int> GetTotalPending();
@@ -21,5 +21,7 @@ namespace FuNews.DAL.Interface
 
         Task<int> CountNewsByCategory(short categoryId, DateTime start, DateTime end);
 
+        Task<List<NewsArticle>> GetPendingNews();
+        Task<List<NewsArticle>> GetOwnedNews(short accountId);
     }
 }

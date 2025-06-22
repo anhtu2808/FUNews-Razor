@@ -5,9 +5,9 @@ namespace FUNewsRazorPages.SignalR.NewsArticle
 {
 	public class NewsHub : Hub
 	{
-        public async Task NotifyChange(String action)
+        public async Task NotifyChange(String action, String id)
         {
-            await Clients.All.SendAsync("ReceiveNewsChange", action);
+            await Clients.All.SendAsync("ReceiveNewsChange", action, id);
         }
     }
 }

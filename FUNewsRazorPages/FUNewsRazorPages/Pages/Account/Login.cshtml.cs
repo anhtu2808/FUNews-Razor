@@ -40,7 +40,8 @@ namespace FUNewsRazorPages.Pages.Account
             var claims = new List<Claim>
             {
             new Claim(ClaimTypes.Name, user.AccountName),
-            new Claim(ClaimTypes.Role, user.AccountRole.ToString()) 
+            new Claim(ClaimTypes.Role, user.AccountRole.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.AccountId.ToString())
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

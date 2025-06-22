@@ -1,0 +1,49 @@
+﻿@page
+@model FUNewsRazorPages.Pages.Account.ManageAccountModel
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary fw-bold">Quản lý tài khoản</h2>
+
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Tên tài khoản</th>
+                <th>Email</th>
+                <th>Vai trò</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Accounts != null && Model.Accounts.Any())
+            {
+                foreach (var acc in Model.Accounts)
+                {
+                    <tr>
+                        <td>@acc.AccountName</td>
+                        <td>@acc.AccountEmail</td>
+                        <td>@Model.GetRoleName(acc.AccountRole)</td>
+                        <td>
+                            @if (acc.IsOnline)
+                            {
+                                <span class="badge bg-success">Online</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Offline</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-center text-muted">Không có tài khoản nào.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

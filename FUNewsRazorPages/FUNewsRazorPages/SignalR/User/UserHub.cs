@@ -4,7 +4,7 @@ namespace FUNewsRazorPages.SignalR.User
 {
     public class UserHub : Hub
     {
-        private static readonly Dictionary<string, string> OnlineUsers = new();
+        public static readonly Dictionary<string, string> OnlineUsers = new();
 
         public override Task OnConnectedAsync()
         {

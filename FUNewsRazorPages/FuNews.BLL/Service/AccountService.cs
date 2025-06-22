@@ -1,4 +1,5 @@
-﻿using FuNews.BLL.Interface;
+﻿using AutoMapper;
+using FuNews.BLL.Interface;
 using FuNews.DAL.Interface;
 using FuNews.Modals.DTOs.Request;
 using FuNews.Modals.DTOs.Response;
@@ -14,11 +15,12 @@ namespace FuNews.BLL.Service
     public class AccountService : IAccountService
     {
         private IAccountRepository _accountRepository;
-		private static readonly Random _random = new();
+        private IMapper _mapper;
 
-		public AccountService(IAccountRepository accountRepository)
+		public AccountService(IAccountRepository accountRepository, IMapper mapper)
         {
             _accountRepository = accountRepository;
+            _mapper = mapper;
         }
 
         public async Task<AccountResponse> login(LoginRequest request)
@@ -29,6 +31,7 @@ namespace FuNews.BLL.Service
                 AccountEmail = account.AccountEmail,
                 AccountName = account.AccountName, 
                 AccountRole = account.AccountRole,
+                AccountId = account.AccountId,
             };
         }
 
@@ -50,6 +53,27 @@ namespace FuNews.BLL.Service
                 AccountName = account.AccountName,
                 AccountEmail = request.AccountEmail,
             };
+
+		}
+
+        public async Task<List<AccountResponse>> GetAllAccount()
+        {
+            var accounts = await _accountRepository.GetAllAsync();
+            List< AccountResponse > responses = new List< AccountResponse >();
+            foreach (var account in accounts) 
+            {
+                AccountResponse response = new()
+                {
+                    AccountId = account.AccountId,
+                    AccountEmail = account.AccountEmail,
+                    AccountName = account.AccountName,
+                    AccountRole = account.AccountRole
+                };
+                responses.Add(response);
+
+			}
+            return responses;
+
 
 		}
 	}

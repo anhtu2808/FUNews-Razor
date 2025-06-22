@@ -29,13 +29,13 @@ namespace FuNews.DAL.Repository
                .CountAsync();
         }
 
-        public async Task<List<NewsArticle>> GetAllNewsByStatus(bool? status)
+        public async Task<List<NewsArticle>> GetAllNewsByStatusAndCategory(bool? status, short categoryId)
         {
             return await _context.NewsArticles
                     .Include(n => n.Category)
                     .Include(n => n.CreatedBy)
-                    .Include(n => n.NewsTags)                
-                    .Where(na => na.NewsStatus == status)
+                    .Include(n => n.NewsTags)
+                    .Where(na => na.NewsStatus == status && na.CategoryId == categoryId)
                     .OrderByDescending(na => na.CreatedDate)
                     .ToListAsync();
         }
@@ -73,6 +73,28 @@ namespace FuNews.DAL.Repository
             return _context.NewsArticles
              .Where(na => na.NewsStatus == true && (na.CreatedDate >= start && na.CreatedDate <= end))
              .CountAsync();
+        }
+
+        public async Task<List<NewsArticle>> GetPendingNews()
+        {
+            return await _context.NewsArticles
+            .Include(n => n.Category)
+            .Include(n => n.CreatedBy)
+            .Include(n => n.NewsTags)
+            .Where(na => na.NewsStatus == false)
+            .OrderByDescending(na => na.CreatedDate)
+            .ToListAsync();
+        }
+
+        public async Task<List<NewsArticle>> GetOwnedNews(short accountId)
+        {
+            return await _context.NewsArticles
+.Include(n => n.Category)
+.Include(n => n.CreatedBy)
+.Include(n => n.NewsTags)
+.Where(na => na.CreatedById == accountId)
+.OrderByDescending(na => na.CreatedDate)
+.ToListAsync();
         }
     }
 }

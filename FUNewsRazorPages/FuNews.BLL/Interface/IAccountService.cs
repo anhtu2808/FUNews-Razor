@@ -12,5 +12,7 @@ namespace FuNews.BLL.Interface
     {
         Task<AccountResponse> login(LoginRequest request);
 		Task<AccountResponse> createAccount(CreateAccountRequest request);
-	}
+
+        Task<List<AccountResponse>> GetAllAccount();
+    }
 }

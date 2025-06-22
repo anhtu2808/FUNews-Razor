@@ -84,7 +84,7 @@
 		const conn = new signalR.HubConnectionBuilder().withUrl("/newsHub").build();
 
 		conn.on("ReceiveNewsChange", function (action) {
-			if (action === "created" || action === "deleted") {
+			if (action === "NewsApproved" || action === "deleted") {
 				location.reload();
 			}
 		});

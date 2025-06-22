@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace FUNewsRazorPages.Pages.NewsArticle
 {
@@ -37,7 +38,8 @@ namespace FUNewsRazorPages.Pages.NewsArticle
         public UpdateNewsArticleRequest EditInput { get; set; } = new();
         public async Task OnGetAsync()
         {
-            NewsList = await _newsArticleService.GetAllNews(true);
+            var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            NewsList = await _newsArticleService.GetOwnedNews(short.Parse(accountId));
             var categories = await _categoryService.GetAllCategories(true);
             AvailableTags = await _tagService.GetAllTagsAsync();
             CategoryOptions = new List<SelectListItem>();

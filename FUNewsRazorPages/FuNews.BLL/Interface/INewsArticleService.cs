@@ -11,9 +11,12 @@ namespace FuNews.BLL.Interface
 {
     public interface INewsArticleService : IBaseService<NewsArticle, String>
     {
-        Task<List<NewsArticleResponse>> GetAllNews(bool? status);
+        Task<List<NewsArticleResponse>> GetAllNews(bool? status, short? categoryId);
+        Task<List<NewsArticleResponse>> GetOwnedNews(short accountId);
+        Task<List<NewsArticleResponse>> GetPendingNews();
+        Task<NewsArticleResponse> CreateNews(CreateNewsArticleRequest request);
 
-		Task<NewsArticleResponse> CreateNews(CreateNewsArticleRequest request);
+        Task ApproveNews(String id, short accountId);
 
         Task DeleteNews(String id);
 

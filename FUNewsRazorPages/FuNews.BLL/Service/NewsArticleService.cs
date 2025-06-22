@@ -29,16 +29,16 @@ namespace FuNews.BLL.Service
             _newsTagRepository = newsTagRepository;
         }
 
-        public async Task<List<NewsArticleResponse>> GetAllNews(bool? status)
+        public async Task<List<NewsArticleResponse>> GetAllNews(bool? status, short? categoryId)
         {
             List<NewsArticleResponse> responses;
-            if (!status.HasValue)
+            if ((!status.HasValue && !categoryId.HasValue) || (status.HasValue && !categoryId.HasValue))
             {
                 responses = _mapper.Map<List<NewsArticleResponse>>(await _newsArticleRepository.GetAllAsync());
             }
             else
             {
-                responses = _mapper.Map<List<NewsArticleResponse>>(await _newsArticleRepository.GetAllNewsByStatus(status));
+                responses = _mapper.Map<List<NewsArticleResponse>>(await _newsArticleRepository.GetAllNewsByStatusAndCategory(status, categoryId.Value));
             }
             return responses;
         }
@@ -90,6 +90,25 @@ namespace FuNews.BLL.Service
             await _newsTagRepository.UpdateNewsTag(newsArticle.NewsArticleId, request.TagIds);
             await _newsArticleRepository.UpdateAsync(_mapper.Map(request, newsArticle));
             return _mapper.Map<NewsArticleResponse>(newsArticle);
+        }
+
+        public async Task<List<NewsArticleResponse>> GetPendingNews()
+        {
+            return _mapper.Map<List<NewsArticleResponse>>(await _newsArticleRepository.GetPendingNews());
+        }
+
+        public async Task ApproveNews(String id, short accountId)
+        {
+            var news = await _newsArticleRepository.GetById(id);
+            news.NewsStatus = true;
+            news.ModifiedDate = DateTime.Now;
+            news.UpdatedById = accountId;
+            await _newsArticleRepository.UpdateAsync(news);
+        }
+
+        public async Task<List<NewsArticleResponse>> GetOwnedNews(short accountId)
+        {
+            return _mapper.Map<List<NewsArticleResponse>>(await _newsArticleRepository.GetOwnedNews(accountId));
         }
 
     }
