@@ -1,0 +1,73 @@
+﻿@model FUNewsRazorPages.Pages.NewsArticle.ManageNewsModel
+@{
+}
+
+<div class="modal fade" id="_CreateFormModel" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Create">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Create New Article</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label asp-for="Input.NewsTitle" class="form-label">News Title</label>
+                        <input asp-for="Input.NewsTitle" class="form-control" />
+                        <span asp-validation-for="Input.NewsTitle" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Headline" class="form-label">Headline</label>
+                        <input asp-for="Input.Headline" class="form-control" />
+                        <span asp-validation-for="Input.Headline" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.NewsContent" class="form-label">Content</label>
+                        <textarea asp-for="Input.NewsContent" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="Input.NewsContent" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.NewsSource" class="form-label">Source</label>
+                        <input asp-for="Input.NewsSource" class="form-control" />
+                        <span asp-validation-for="Input.NewsSource" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.UrlThumbnails" class="form-label">Thumbnail Filename</label>
+                        <input asp-for="Input.UrlThumbnails" class="form-control" />
+                        <span asp-validation-for="Input.UrlThumbnails" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.CategoryId" class="form-label">Category</label>
+                        <select asp-for="Input.CategoryId" asp-items="Model.CategoryOptions" class="form-select">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                        <span asp-validation-for="Input.CategoryId" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tags</label>
+                        <div>
+                            @foreach (var tag in Model.AvailableTags)
+                            {
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           name="Input.TagIds"
+                                           value="@tag.TagId"
+                                           id="tag_@tag.TagId"/>
+                                    <label class="form-check-label" for="tag_@tag.TagId">@tag.TagName</label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="Input.TagIds" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+               
+            </form>
+        </div>
+    </div>
+</div>

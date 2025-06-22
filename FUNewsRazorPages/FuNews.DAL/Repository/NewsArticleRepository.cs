@@ -24,5 +24,12 @@ namespace FuNews.DAL.Repository
                     .ToListAsync();
         }
 
+        public async Task<NewsArticle> GetById(String id)
+        {
+            return await _context.NewsArticles
+                    .Include(n => n.Category).Include(n => n.CreatedBy).Include(n => n.NewsTags)
+                    .FirstAsync(na => na.NewsArticleId == id);
+        }
+
     }
 }

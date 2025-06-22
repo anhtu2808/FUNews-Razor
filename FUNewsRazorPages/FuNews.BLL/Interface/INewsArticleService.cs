@@ -14,5 +14,11 @@ namespace FuNews.BLL.Interface
         Task<List<NewsArticleResponse>> GetAllNews(bool? status);
 
 		Task<NewsArticleResponse> CreateNews(CreateNewsArticleRequest request);
-	}
+
+        Task DeleteNews(String id);
+
+        Task<NewsArticleResponse> GetNewsById(String id);
+        Task<UpdateNewsArticleResponse> GetNewsByIdToUpdate(String id);
+
+    }
 }

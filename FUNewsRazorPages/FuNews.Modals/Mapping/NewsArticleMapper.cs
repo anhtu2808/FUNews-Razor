@@ -25,8 +25,9 @@ namespace FuNews.Modals.Mapping
                     opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy.AccountName : "N/A"));
 
             CreateMap<CreateNewsArticleRequest, NewsArticle>();
+            CreateMap<NewsArticle, UpdateNewsArticleResponse>();
+                
 
-
-		}
+        }
     }
 }

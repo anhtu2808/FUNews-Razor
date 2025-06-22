@@ -1,4 +1,4 @@
-using FuNews.BLL.Interface;
+﻿using FuNews.BLL.Interface;
 using FuNews.BLL.Service;
 using FuNews.Modals.DTOs.Request;
 using FuNews.Modals.DTOs.Response;
@@ -16,22 +16,28 @@ namespace FUNewsRazorPages.Pages.NewsArticle
         private readonly ICategoryService _categoryService;
         private readonly ILogger<IndexModel> _logger;
 		private readonly IHubContext<NewsHub> _hub;
-		public ManageNewsModel(ILogger<IndexModel> logger, INewsArticleService newsArticleService, ICategoryService categoryService, IHubContext<NewsHub> hub)
+        private readonly ITagService _tagService;
+		public ManageNewsModel(ILogger<IndexModel> logger, INewsArticleService newsArticleService, ICategoryService categoryService, IHubContext<NewsHub> hub, ITagService tagService)
         {
             _newsArticleService = newsArticleService;
             _logger = logger;
             _categoryService = categoryService;
             _hub = hub;
+            _tagService = tagService;
         }
 
         public List<NewsArticleResponse> NewsList { get; set; } = new();
         [BindProperty]
         public CreateNewsArticleRequest Input { get; set; } = new();
         public List<SelectListItem> CategoryOptions { get; set; } = new();
+        public List<TagResponse> AvailableTags { get; set; } = new();
+        [BindProperty]
+        public UpdateNewsArticleRequest EditInput { get; set; } = new();
         public async Task OnGetAsync()
         {
             NewsList = await _newsArticleService.GetAllNews(true);
             var categories = await _categoryService.GetAllCategories(true);
+            AvailableTags = await _tagService.GetAllTagsAsync();
             CategoryOptions = new List<SelectListItem>();
             foreach (var cat in categories)
             {
@@ -43,7 +49,7 @@ namespace FUNewsRazorPages.Pages.NewsArticle
             }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostCreateAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -58,9 +64,34 @@ namespace FUNewsRazorPages.Pages.NewsArticle
 
 		public async Task<IActionResult> OnPostDeleteAsync(String id)
 		{
-			await _newsArticleService.DeleteAsync(id);
+			await _newsArticleService.DeleteNews(id);
 			await _hub.Clients.All.SendAsync("ReceiveNewsChange", "deleted");
 			return RedirectToPage("ManageNews");
 		}
-	}
+
+        public async Task<JsonResult> OnGetGetNews(string id)
+        {
+            var news = await _newsArticleService.GetNewsByIdToUpdate(id);
+
+            var options = new System.Text.Json.JsonSerializerOptions
+            {
+                PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
+            };
+
+            return new JsonResult(news, options);
+        }
+
+        //public async Task<IActionResult> OnPostEditAsync()
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        await OnGetAsync();
+        //        return Page();
+        //    }
+
+        //    await _newsArticleService.UpdateNews(EditInput);
+        //    await _hub.Clients.All.SendAsync("ReceiveNewsChange", "edited");
+        //    return RedirectToPage("ManageNews");
+        //}
+    }
 }

@@ -26,7 +26,7 @@ namespace FUNewsRazorPages
             builder.Services.AddScoped<INewsArticleRepository, NewsArticleRepository>();
             builder.Services.AddScoped<ITagRepository, TagRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
+            builder.Services.AddScoped<INewsTagRepository, NewsTagRepository>();
             // Đăng ký Service
             builder.Services.AddScoped<INewsArticleService, NewsArticleService>();
             builder.Services.AddScoped<ITagService, TagService>();
@@ -36,7 +36,7 @@ namespace FUNewsRazorPages
 
             // Đăng ký AutoMapper
             builder.Services.AddAutoMapper(typeof(NewsArticleMapper).Assembly);
-            //builder.Services.AddAutoMapper(typeof(CategoryMapper).Assembly);
+            builder.Services.AddAutoMapper(typeof(CategoryProfile).Assembly);
             builder.Services.AddSignalR();
             var app = builder.Build();
 
