@@ -32,7 +32,9 @@ namespace FuNews.DAL.Repository
         public async Task<List<NewsArticle>> GetAllNewsByStatus(bool? status)
         {
             return await _context.NewsArticles
-                    .Include(n => n.Category).Include(n => n.CreatedBy).Include(n => n.NewsTags)
+                    .Include(n => n.Category)
+                    .Include(n => n.CreatedBy)
+                    .Include(n => n.NewsTags)                
                     .Where(na => na.NewsStatus == status)
                     .OrderByDescending(na => na.CreatedDate)
                     .ToListAsync();
@@ -41,7 +43,7 @@ namespace FuNews.DAL.Repository
         public async Task<NewsArticle> GetById(String id)
         {
             return await _context.NewsArticles
-                    .Include(n => n.Category).Include(n => n.CreatedBy).Include(n => n.NewsTags)
+                    .Include(n => n.Category).Include(n => n.CreatedBy).Include(n => n.NewsTags).ThenInclude(nt => nt.Tag)
                     .FirstAsync(na => na.NewsArticleId == id);
         }
 

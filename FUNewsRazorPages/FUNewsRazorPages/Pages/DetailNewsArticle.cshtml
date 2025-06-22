@@ -1,0 +1,65 @@
+﻿@page "{id}"
+@model FUNewsRazorPages.Pages.DetailNewsArticleModel
+@{
+    ViewData["Title"] = Model.News?.NewsTitle ?? "Chi tiết bài viết";
+}
+
+<div class="container mt-5 mb-5 d-flex justify-content-center">
+    @if (Model.News != null)
+    {
+        <div class="card border rounded-4 shadow-lg bg-white w-100 col-lg-10 col-xl-9">
+            <div class="card-body p-5">
+                <h2 class="fw-bold mb-4 text-dark">@Model.News.NewsTitle</h2>
+
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 small text-muted">
+                    <div>
+                        <i class="bi bi-calendar-event me-1"></i>
+                        @Model.News.CreatedDate?.ToString("dd/MM/yyyy")
+                        &nbsp;&bull;&nbsp;
+                        <i class="bi bi-folder me-1"></i>
+                        @Model.News.CategoryName
+                        &nbsp;&bull;&nbsp;
+                        <i class="bi bi-person me-1"></i>
+                        @Model.News.AuthorName
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.News.NewsSource))
+                    {
+                        <div class="fst-italic text-secondary">
+                            <i class="bi bi-link-45deg me-1"></i>Nguồn: @Model.News.NewsSource
+                        </div>
+                    }
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.News.UrlThumbnails))
+                {
+                    <img src="@Model.News.UrlThumbnails"
+                         class="img-fluid rounded shadow mb-4 w-100"
+                         style="max-height: 400px; object-fit: cover;" />
+                }
+
+                <p class="lead text-dark mb-4">@Model.News.Headline</p>
+                <hr class="mb-4" />
+
+                <div class="news-content text-dark" style="line-height: 1.8; font-size: 1.1rem;">
+                    @Html.Raw(Model.News.NewsContent)
+                </div>
+
+                @if (Model.News.TagNames != null && Model.News.TagNames.Any())
+                {
+                    <div class="mt-5">
+                        <span class="fw-semibold text-dark">Tags:</span>
+                        @foreach (var tag in Model.News.TagNames)
+                        {
+                            <span class="badge bg-secondary me-1">@tag</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">Không tìm thấy bài viết.</div>
+    }
+</div>
