@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace FuNews.Modals.DTOs.Request
 
         public string? NewsContent { get; set; }
         public string? NewsSource { get; set; }
+        public IFormFile? UrlThumbnailsFile { get; set; } 
         public string? UrlThumbnails { get; set; }
         public short? CategoryId { get; set; }
         public List<int>? TagIds { get; set; }

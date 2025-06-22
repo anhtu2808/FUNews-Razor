@@ -17,13 +17,15 @@ namespace FUNewsRazorPages.Pages.NewsArticle
         private readonly ILogger<IndexModel> _logger;
 		private readonly IHubContext<NewsHub> _hub;
         private readonly ITagService _tagService;
-		public ManageNewsModel(ILogger<IndexModel> logger, INewsArticleService newsArticleService, ICategoryService categoryService, IHubContext<NewsHub> hub, ITagService tagService)
+        private readonly IWebHostEnvironment _env;
+		public ManageNewsModel(ILogger<IndexModel> logger, INewsArticleService newsArticleService, ICategoryService categoryService, IHubContext<NewsHub> hub, ITagService tagService, IWebHostEnvironment env)
         {
             _newsArticleService = newsArticleService;
             _logger = logger;
             _categoryService = categoryService;
             _hub = hub;
             _tagService = tagService;
+            _env = env;
         }
 
         public List<NewsArticleResponse> NewsList { get; set; } = new();
@@ -56,6 +58,12 @@ namespace FUNewsRazorPages.Pages.NewsArticle
                 await OnGetAsync();
                 return Page();
             }
+            if (Input.UrlThumbnailsFile != null)
+            {
+                var savedPath = await SaveImageAsync(Input.UrlThumbnailsFile, _env.WebRootPath);
+                Input.UrlThumbnailsPath = savedPath; 
+            }
+
 
             await _newsArticleService.CreateNews(Input);
 			await _hub.Clients.All.SendAsync("ReceiveNewsChange", "created");
@@ -88,10 +96,35 @@ namespace FUNewsRazorPages.Pages.NewsArticle
                 await OnGetAsync();
                 return Page();
             }
-
+            if (EditInput.UrlThumbnailsFile != null)
+            {
+                var savedFileName = await SaveImageAsync(EditInput.UrlThumbnailsFile, _env.WebRootPath);
+                EditInput.UrlThumbnails = savedFileName; 
+            }
             await _newsArticleService.UpdateNews(EditInput);
             await _hub.Clients.All.SendAsync("ReceiveNewsChange", "edited");
             return RedirectToPage("ManageNews");
+        }
+
+        private async Task<string> SaveImageAsync(IFormFile file, string webRootPath, string subFolder = "uploads")
+        {
+            if (file == null || file.Length == 0) return null;
+
+            var uploadsFolder = Path.Combine(webRootPath, subFolder);
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return fileName;
         }
     }
 }

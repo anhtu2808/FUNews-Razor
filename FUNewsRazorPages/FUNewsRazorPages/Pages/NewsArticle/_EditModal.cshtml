@@ -3,7 +3,7 @@
 <div class="modal fade" id="editNewsModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form method="post" asp-page-handler="Edit">
+            <form method="post" asp-page-handler="Edit" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLabel">Edit Article</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -29,7 +29,12 @@
                     </div>
                     <div class="mb-3">
                         <label>Thumbnail</label>
-                        <input type="text" class="form-control" id="editThumbnail" name="EditInput.UrlThumbnails" />
+                        <input type="file" class="form-control" id="editThumbnailFile" name="EditInput.UrlThumbnailsFile" accept="image/*" onchange="previewEditImage(this)" />
+                        <input type="hidden" name="EditInput.UrlThumbnails" id="editOldThumbnail" />
+                        <!-- Preview -->
+                        <div class="mt-2">
+                            <img id="editThumbnailPreview" src="#" alt="Current Thumbnail" class="img-thumbnail" style="max-height: 200px; display:none;" />
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -66,6 +71,22 @@
 </div>
 
 <script>
+    function previewEditImage(input) {
+        const preview = document.getElementById("editThumbnailPreview");
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = "block";
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.style.display = "none";
+            preview.src = "#";
+        }
+    }
+
     const editModal = document.getElementById('editNewsModal');
     editModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
@@ -79,7 +100,11 @@
                 document.getElementById('editHeadline').value = data.headline;
                 document.getElementById('editNewsContent').value = data.newsContent;
                 document.getElementById('editSource').value = data.newsSource;
-                document.getElementById('editThumbnail').value = data.urlThumbnails;
+                document.getElementById('editOldThumbnail').value = data.urlThumbnails;
+                const preview = document.getElementById('editThumbnailPreview');
+                preview.src = `/uploads/${data.urlThumbnails}`;
+                preview.style.display = "block";
+
                 document.getElementById('editCategory').value = data.categoryId;
 
                 const checkboxes = document.querySelectorAll('#editTagCheckboxes input[type="checkbox"]');

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace FuNews.Modals.DTOs.Request;
 
 public class CreateNewsArticleRequest
@@ -7,7 +9,8 @@ public class CreateNewsArticleRequest
 
 	public string? NewsContent { get; set; }
 	public string? NewsSource { get; set; }
-	public string? UrlThumbnails { get; set; }
-	public short? CategoryId { get; set; }
+    public IFormFile? UrlThumbnailsFile { get; set; } 
+    public string? UrlThumbnailsPath { get; set; } 
+    public short? CategoryId { get; set; }
 	public List<int>? TagIds { get; set; }
 }

@@ -24,7 +24,8 @@ namespace FuNews.Modals.Mapping
                 .ForMember(dest => dest.AuthorName, opt =>
                     opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy.AccountName : "N/A"));
 
-            CreateMap<CreateNewsArticleRequest, NewsArticle>();
+            CreateMap<CreateNewsArticleRequest, NewsArticle>()
+                .ForMember(dest => dest.UrlThumbnails, opt => opt.MapFrom(src => src.UrlThumbnailsPath));
             CreateMap<NewsArticle, UpdateNewsArticleResponse>();
             CreateMap<UpdateNewsArticleRequest, NewsArticle>()
                    .ForMember(dest => dest.NewsArticleId, opt => opt.Ignore());
