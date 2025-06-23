@@ -64,18 +64,22 @@
     </div>
 </div>
 
-<script>
-    const conn = new signalR.HubConnectionBuilder()
-        .withUrl("/newsHub")
-        .build();
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        // NewsHub connection for real-time news updates
+        const conn = new signalR.HubConnectionBuilder()
+            .withUrl("/newsHub")
+            .build();
 
-    conn.on("ReceiveNewsChange", function (action, newsId) {
-        if (action === "Approved") {
-            console.log("Bài viết đã được duyệt: " + newsId);
-            // Làm gì đó, ví dụ reload list:
-            location.reload();
-        }
-    });
+        conn.on("ReceiveNewsChange", function (action, newsId) {
+            if (action === "Approved") {
+                console.log("Bài viết đã được duyệt: " + newsId);
+                // Làm gì đó, ví dụ reload list:
+                location.reload();
+            }
+        });
 
-    conn.start().catch(err => console.error(err.toString()));
-</script>
+        conn.start().catch(err => console.error(err.toString()));
+    </script>
+}

@@ -39,7 +39,10 @@ namespace FUNewsRazorPages.Pages.NewsArticle
         public async Task OnGetAsync()
         {
             var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            NewsList = await _newsArticleService.GetOwnedNews(short.Parse(accountId));
+            if (accountId != null)
+            {
+                NewsList = await _newsArticleService.GetOwnedNews(short.Parse(accountId));
+            }
             var categories = await _categoryService.GetAllCategories(true);
             AvailableTags = await _tagService.GetAllTagsAsync();
             CategoryOptions = new List<SelectListItem>();
@@ -108,7 +111,7 @@ namespace FUNewsRazorPages.Pages.NewsArticle
             return RedirectToPage("ManageNews");
         }
 
-        private async Task<string> SaveImageAsync(IFormFile file, string webRootPath, string subFolder = "uploads")
+        private async Task<string?> SaveImageAsync(IFormFile file, string webRootPath, string subFolder = "uploads")
         {
             if (file == null || file.Length == 0) return null;
 

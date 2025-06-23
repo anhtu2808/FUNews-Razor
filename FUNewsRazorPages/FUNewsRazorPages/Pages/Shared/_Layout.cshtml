@@ -63,6 +63,10 @@
 									<li><a class="dropdown-item" asp-page="/Account/ManageAccount">
 										<i class="bi bi-people me-2"></i>Accounts
 									</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" asp-page="/Admin/SignalRDebug">
+										<i class="bi bi-bug me-2"></i>SignalR Debug
+									</a></li>
 								</ul>
 							</li>
 						}
@@ -106,6 +110,57 @@
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
 	<script src="~/js/userHub-connection.js" asp-append-version="true"></script>
+
+	@* Global UserHub Connection for All Logged-in Users *@
+	@if (User.Identity.IsAuthenticated)
+	{
+		var accountEmail = Context.Session.GetString("AccountEmail");
+		var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+		<script>
+			document.addEventListener('DOMContentLoaded', async function() {
+				const currentUserEmail = "@accountEmail";
+				const currentUserRole = "@userRole";
+				
+				console.log("Layout: Attempting UserHub connection for email:", currentUserEmail);
+				console.log("Layout: User role:", currentUserRole);
+				
+				if (currentUserEmail && window.userHubManager) {
+					try {
+						await window.userHubManager.connect(currentUserEmail);
+						console.log("✅ Layout: Successfully connected to UserHub for email:", currentUserEmail);
+					} catch (err) {
+						console.error("❌ Layout: Failed to connect to UserHub:", err);
+					}
+				} else if (currentUserEmail) {
+					console.warn("⚠️ Layout: Email found but userHubManager not available yet, retrying...");
+					// Try again after a short delay in case script is still loading
+					setTimeout(async () => {
+						if (window.userHubManager) {
+							try {
+								await window.userHubManager.connect(currentUserEmail);
+								console.log("✅ Layout: Successfully connected to UserHub (delayed) for email:", currentUserEmail);
+							} catch (err) {
+								console.error("❌ Layout: Failed to connect to UserHub (delayed):", err);
+							}
+						} else {
+							console.error("❌ Layout: userHubManager still not available after delay");
+						}
+					}, 1000);
+				} else {
+					console.warn("⚠️ Layout: No email found in session");
+				}
+
+				// Cleanup on page unload
+				window.addEventListener('beforeunload', function() {
+					if (window.userHubManager && window.userHubManager.isConnected) {
+						console.log("Layout: Disconnecting UserHub on page unload");
+						window.userHubManager.disconnect();
+					}
+				});
+			});
+		
+		</script>
+	}
 
 	@await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -18,9 +18,22 @@ namespace FUNewsRazorPages
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-			builder.WebHost.UseUrls("http://0.0.0.0:5000");
+			builder.WebHost.UseUrls("http://0.0.0.0:5017");
+			
 			// Add services to the container.
 			builder.Services.AddRazorPages();
+            
+            // Add CORS for better network connectivity
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             builder.Services.AddDbContext<FuNewsDbContext>(options =>
              options.UseSqlServer(
                  builder.Configuration.GetConnectionString("DefaultConnection")
@@ -48,8 +61,23 @@ namespace FUNewsRazorPages
             // Đăng ký AutoMapper
             builder.Services.AddAutoMapper(typeof(NewsArticleMapper).Assembly);
             builder.Services.AddAutoMapper(typeof(CategoryProfile).Assembly);
-            builder.Services.AddSignalR();
-            builder.Services.AddSession();
+            
+            // Enhanced SignalR configuration for network access
+            builder.Services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+                options.KeepAliveInterval = TimeSpan.FromSeconds(10);
+                options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+                options.HandshakeTimeout = TimeSpan.FromSeconds(15);
+            });
+            
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            
             var app = builder.Build();
 
 			var adminConfig = builder.Configuration.GetSection("AdminAccount");
@@ -83,8 +111,14 @@ namespace FUNewsRazorPages
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            // Use CORS
+            app.UseCors();
+            
+            // SignalR Hub mappings
             app.MapHub<NewsHub>("/newsHub");
             app.MapHub<UserHub>("/userHub");
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();

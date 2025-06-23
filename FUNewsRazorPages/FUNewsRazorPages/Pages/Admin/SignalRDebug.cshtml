@@ -1,0 +1,191 @@
+@page
+@model FUNewsRazorPages.Pages.Admin.SignalRDebugModel
+@{
+    ViewData["Title"] = "SignalR Debug";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">SignalR Debug Information</h2>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="bi bi-info-circle me-2"></i>Connection Status</h5>
+                </div>
+                <div class="card-body">
+                    <div id="connectionStatus">
+                        <p><strong>Status:</strong> <span id="status" class="badge bg-secondary">Checking...</span></p>
+                        <p><strong>Email:</strong> <span id="userEmail">-</span></p>
+                        <p><strong>Transport:</strong> <span id="transport">-</span></p>
+                        <p><strong>Reconnect Attempts:</strong> <span id="reconnectAttempts">-</span></p>
+                    </div>
+                    <button id="connectBtn" class="btn btn-primary me-2">Connect</button>
+                    <button id="disconnectBtn" class="btn btn-secondary me-2">Disconnect</button>
+                    <button id="refreshBtn" class="btn btn-info">Refresh Status</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="bi bi-globe me-2"></i>Network Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Host:</strong> <span id="host">-</span></p>
+                    <p><strong>Hostname:</strong> <span id="hostname">-</span></p>
+                    <p><strong>Port:</strong> <span id="port">-</span></p>
+                    <p><strong>Protocol:</strong> <span id="protocol">-</span></p>
+                    <p><strong>Origin:</strong> <span id="origin">-</span></p>
+                    <p><strong>Browser Online:</strong> <span id="online">-</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="bi bi-people me-2"></i>Online Users (Server Side)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Total Connections:</strong> @Model.TotalConnections</p>
+                            <p><strong>Unique Users:</strong> @Model.UniqueUsers</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Online Users:</h6>
+                            @if (Model.OnlineUsers.Any())
+                            {
+                                <ul class="list-group list-group-flush">
+                                    @foreach (var user in Model.OnlineUsers)
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            @user
+                                            <span class="badge bg-success rounded-pill">Online</span>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p class="text-muted">No users currently online</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="bi bi-terminal me-2"></i>Debug Console</h5>
+                </div>
+                <div class="card-body">
+                    <div id="debugConsole" style="height: 300px; overflow-y: scroll; background: #1e1e1e; color: #dcdcdc; padding: 15px; font-family: 'Courier New', monospace; font-size: 12px;">
+                        <p style="color: #4CAF50;">Debug console initialized...</p>
+                    </div>
+                    <button id="clearConsole" class="btn btn-warning mt-2">Clear Console</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let debugConsole = document.getElementById('debugConsole');
+        let originalConsoleLog = console.log;
+        let originalConsoleError = console.error;
+
+        function addToDebugConsole(message, type = 'log') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#F44336' : (type === 'warn' ? '#FF9800' : '#4CAF50');
+            debugConsole.innerHTML += `<p style="color: ${color};">[${timestamp}] ${message}</p>`;
+            debugConsole.scrollTop = debugConsole.scrollHeight;
+        }
+
+        // Override console methods to capture logs
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            addToDebugConsole(args.join(' '), 'log');
+        };
+
+        console.error = function(...args) {
+            originalConsoleError.apply(console, args);
+            addToDebugConsole(args.join(' '), 'error');
+        };
+
+        function updateNetworkInfo() {
+            document.getElementById('host').textContent = window.location.host;
+            document.getElementById('hostname').textContent = window.location.hostname;
+            document.getElementById('port').textContent = window.location.port || (window.location.protocol === 'https:' ? '443' : '80');
+            document.getElementById('protocol').textContent = window.location.protocol;
+            document.getElementById('origin').textContent = window.location.origin;
+            document.getElementById('online').textContent = navigator.onLine ? 'Yes' : 'No';
+        }
+
+        function updateConnectionStatus() {
+            if (window.userHubManager) {
+                const status = window.userHubManager.getStatus();
+                document.getElementById('status').textContent = status.connectionState;
+                document.getElementById('status').className = status.isConnected ? 'badge bg-success' : 'badge bg-danger';
+                document.getElementById('userEmail').textContent = status.userEmail || '-';
+                document.getElementById('transport').textContent = status.transport;
+                document.getElementById('reconnectAttempts').textContent = status.reconnectAttempts;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNetworkInfo();
+            updateConnectionStatus();
+
+            // Update status every 5 seconds
+            setInterval(updateConnectionStatus, 5000);
+
+            document.getElementById('connectBtn').addEventListener('click', async function() {
+                const email = "@HttpContext.Session.GetString("AccountEmail")";
+                if (email && window.userHubManager) {
+                    try {
+                        await window.userHubManager.connect(email);
+                        updateConnectionStatus();
+                    } catch (err) {
+                        console.error('Failed to connect:', err);
+                    }
+                }
+            });
+
+            document.getElementById('disconnectBtn').addEventListener('click', async function() {
+                if (window.userHubManager) {
+                    try {
+                        await window.userHubManager.disconnect();
+                        updateConnectionStatus();
+                    } catch (err) {
+                        console.error('Failed to disconnect:', err);
+                    }
+                }
+            });
+
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                updateConnectionStatus();
+                updateNetworkInfo();
+            });
+
+            document.getElementById('clearConsole').addEventListener('click', function() {
+                debugConsole.innerHTML = '<p style="color: #4CAF50;">Debug console cleared...</p>';
+            });
+
+            // Auto-connect if user is logged in
+            const email = "@HttpContext.Session.GetString("AccountEmail")";
+            if (email && window.userHubManager) {
+                window.userHubManager.connect(email);
+            }
+        });
+    </script>
+} 

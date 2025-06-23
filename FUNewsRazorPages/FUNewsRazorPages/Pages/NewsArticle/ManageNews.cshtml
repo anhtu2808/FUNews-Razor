@@ -84,13 +84,14 @@
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script>
-        const connection = new signalR.HubConnectionBuilder().withUrl("/newsHub").build();
+        // NewsHub connection for real-time news updates
+        const newsConnection = new signalR.HubConnectionBuilder().withUrl("/newsHub").build();
 
-        connection.on("ReceiveNewsChange", function (action) {
+        newsConnection.on("ReceiveNewsChange", function (action) {
             location.reload();
         });
 
-        connection.start().catch(err => console.error(err.toString()));
+        newsConnection.start().catch(err => console.error(err.toString()));
     </script>
     <script>
         function confirmDelete(newsId, title) {
@@ -100,5 +101,4 @@
             }
         }
     </script>
-
 }

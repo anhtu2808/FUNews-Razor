@@ -128,16 +128,13 @@ else
 @section Scripts {
     <script src="~/js/accounts.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', async function() {
-            const currentUserEmail = "@HttpContext.Session.GetString("AccountEmail")";
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("ManageAccount: Setting up UserHub status change listener");
             
-            if (currentUserEmail && window.userHubManager) {
-                // Connect to UserHub
-                await window.userHubManager.connect(currentUserEmail);
-                
-                // Listen for user status changes
+            // Listen for user status changes (UserHub connection is handled globally in Layout)
+            if (window.userHubManager) {
                 window.userHubManager.onUserStatusChanged((changedEmail, isOnline) => {
-                    console.log(`User status changed: ${changedEmail} is ${isOnline ? 'online' : 'offline'}`);
+                    console.log(`ManageAccount: User status changed: ${changedEmail} is ${isOnline ? 'online' : 'offline'}`);
                     const row = document.querySelector(`[data-email="${changedEmail}"]`);
                     if (row) {
                         const badge = row.querySelector(".status-badge");
@@ -152,6 +149,28 @@ else
                         }
                     }
                 });
+            } else {
+                console.warn("ManageAccount: userHubManager not available, retrying...");
+                setTimeout(() => {
+                    if (window.userHubManager) {
+                        window.userHubManager.onUserStatusChanged((changedEmail, isOnline) => {
+                            console.log(`ManageAccount: User status changed (delayed): ${changedEmail} is ${isOnline ? 'online' : 'offline'}`);
+                            const row = document.querySelector(`[data-email="${changedEmail}"]`);
+                            if (row) {
+                                const badge = row.querySelector(".status-badge");
+                                if (badge) {
+                                    if (isOnline) {
+                                        badge.className = "status-badge online";
+                                        badge.innerHTML = '<i class="bi bi-circle-fill me-1"></i>Online';
+                                    } else {
+                                        badge.className = "status-badge offline";
+                                        badge.innerHTML = '<i class="bi bi-circle me-1"></i>Offline';
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }, 1000);
             }
         });
     </script>
