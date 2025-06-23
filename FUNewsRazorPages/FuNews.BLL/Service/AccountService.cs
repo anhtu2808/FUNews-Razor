@@ -73,8 +73,57 @@ namespace FuNews.BLL.Service
 
 			}
             return responses;
-
-
 		}
+
+        public async Task<AccountResponse> updateAccount(short accountId, UpdateAccountRequest request)
+        {
+            var account = await _accountRepository.GetByIdAsync(accountId);
+            if (account == null)
+                throw new ArgumentException("Account not found");
+
+            account.AccountName = request.AccountName;
+            account.AccountEmail = request.AccountEmail;
+            account.AccountRole = request.AccountRole;
+            
+            // Only update password if provided
+            if (!string.IsNullOrEmpty(request.AccountPassword))
+            {
+                account.AccountPassword = request.AccountPassword;
+            }
+
+            await _accountRepository.UpdateAsync(account);
+
+            return new AccountResponse
+            {
+                AccountId = account.AccountId,
+                AccountName = account.AccountName,
+                AccountEmail = account.AccountEmail,
+                AccountRole = account.AccountRole
+            };
+        }
+
+        public async Task deleteAccount(short accountId)
+        {
+            var account = await _accountRepository.GetByIdAsync(accountId);
+            if (account == null)
+                throw new ArgumentException("Account not found");
+
+            await _accountRepository.DeleteAsync(accountId);
+        }
+
+        public async Task<AccountResponse> GetAccountById(short accountId)
+        {
+            var account = await _accountRepository.GetByIdAsync(accountId);
+            if (account == null)
+                throw new ArgumentException("Account not found");
+
+            return new AccountResponse
+            {
+                AccountId = account.AccountId,
+                AccountName = account.AccountName,
+                AccountEmail = account.AccountEmail,
+                AccountRole = account.AccountRole
+            };
+        }
 	}
 }

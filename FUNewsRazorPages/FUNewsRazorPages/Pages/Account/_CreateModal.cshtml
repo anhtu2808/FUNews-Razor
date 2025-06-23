@@ -1,0 +1,75 @@
+<!-- Create Account Modal -->
+<div class="modal fade" id="createAccountModal" tabindex="-1" aria-labelledby="createAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Create" id="createAccountForm">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="createAccountModalLabel">
+                        <i class="bi bi-person-plus-fill me-2"></i>Create New Account
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="createAccountName" class="form-label">
+                                    <i class="bi bi-person me-2"></i>Account Name
+                                </label>
+                                <input type="text" class="form-control" id="createAccountName" name="CreateAccount.AccountName" placeholder="Enter account name" maxlength="100" required />
+                                <div class="char-counter">
+                                    <span class="current-chars">0</span>/100 characters
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="createAccountEmail" class="form-label">
+                                    <i class="bi bi-envelope me-2"></i>Email Address
+                                </label>
+                                <input type="email" class="form-control" id="createAccountEmail" name="CreateAccount.AccountEmail" placeholder="Enter email address" maxlength="70" required />
+                                <div class="char-counter">
+                                    <span class="current-chars">0</span>/70 characters
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="createAccountRole" class="form-label">
+                                    <i class="bi bi-shield me-2"></i>Role
+                                </label>
+                                <select class="form-select" id="createAccountRole" name="CreateAccount.AccountRole" required>
+                                    <option value="">Select a role</option>
+                                    <option value="1">Staff</option>
+                                    <option value="2">Lecturer</option>
+                                    <option value="3">Admin</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="createAccountPassword" class="form-label">
+                                    <i class="bi bi-lock me-2"></i>Password
+                                </label>
+                                <input type="password" class="form-control" id="createAccountPassword" name="CreateAccount.AccountPassword" placeholder="Enter password" maxlength="70" required />
+                                <div class="char-counter">
+                                    <span class="current-chars">0</span>/70 characters
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-2"></i>Create Account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 

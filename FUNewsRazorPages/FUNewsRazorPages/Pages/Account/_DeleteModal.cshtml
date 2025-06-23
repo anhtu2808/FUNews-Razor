@@ -1,0 +1,50 @@
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Delete" id="deleteAccountForm">
+                <input type="hidden" id="deleteAccountId" name="id" />
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteAccountModalLabel">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Delete Account
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                        <div>
+                            <strong>Warning!</strong> This action cannot be undone.
+                        </div>
+                    </div>
+                    <p class="mb-3">
+                        Are you sure you want to permanently delete this account?
+                    </p>
+                    <div class="account-info-card">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-circle fs-2 text-muted me-3"></i>
+                            <div>
+                                <h6 class="mb-1" id="deleteAccountName">Account Name</h6>
+                                <small class="text-muted" id="deleteAccountEmail">email@example.com</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle me-1"></i>
+                            All data associated with this account will be permanently removed from the system.
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash3 me-2"></i>Delete Account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 

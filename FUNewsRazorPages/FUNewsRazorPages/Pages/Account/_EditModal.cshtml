@@ -1,0 +1,78 @@
+<!-- Edit Account Modal -->
+<div class="modal fade" id="editAccountModal" tabindex="-1" aria-labelledby="editAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Edit" id="editAccountForm">
+                <input type="hidden" id="editAccountId" name="id" />
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title" id="editAccountModalLabel">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Account
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editAccountId" name="id" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editAccountName" class="form-label">
+                                    <i class="bi bi-person me-2"></i>Account Name
+                                </label>
+                                <input type="text" class="form-control" id="editAccountName" name="UpdateAccount.AccountName" placeholder="Enter account name" maxlength="100" required />
+                                <div class="char-counter">
+                                    <span class="current-chars">0</span>/100 characters
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editAccountEmail" class="form-label">
+                                    <i class="bi bi-envelope me-2"></i>Email Address
+                                </label>
+                                <input type="email" class="form-control" id="editAccountEmail" name="UpdateAccount.AccountEmail" placeholder="Enter email address" maxlength="70" required />
+                                <div class="char-counter">
+                                    <span class="current-chars">0</span>/70 characters
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editAccountRole" class="form-label">
+                                    <i class="bi bi-shield me-2"></i>Role
+                                </label>
+                                <select class="form-select" id="editAccountRole" name="UpdateAccount.AccountRole" required>
+                                    <option value="">Select a role</option>
+                                    <option value="1">Staff</option>
+                                    <option value="2">Lecturer</option>
+                                    <option value="3">Admin</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editAccountPassword" class="form-label">
+                                    <i class="bi bi-lock me-2"></i>New Password (Optional)
+                                </label>
+                                <input type="password" class="form-control" id="editAccountPassword" name="UpdateAccount.AccountPassword" placeholder="Leave blank to keep current password" maxlength="70" />
+                                <div class="char-counter">
+                                    <span class="current-chars">0</span>/70 characters
+                                </div>
+                                <small class="form-text text-muted">Leave blank to keep the current password</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-check-circle me-2"></i>Update Account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
