@@ -27,16 +27,29 @@
 		{
 			<div class="col-md-7 d-flex" id="mainArticleContainer">
 				<div class="news-main card border-0 w-100 h-100"
-     style="cursor: pointer;"
-     onclick="window.location.href='@Url.Page("/DetailNewsArticle", new { id = mainArticle.NewsArticleId })'"
-     data-id="@mainArticle.NewsArticleId">
-    <img src="@mainArticle.UrlThumbnails" class="card-img-top" style="height:350px; object-fit:cover;" />
-    <div class="card-body">
-        <h3 class="card-title fw-bold news-title">@mainArticle.NewsTitle</h3>
-        <p class="text-muted">@mainArticle.CreatedDate?.ToString("dd/MM/yyyy")</p>
-        <p class="card-text">@mainArticle.Headline</p>
-    </div>
-</div>
+					 style="cursor: pointer;"
+					 onclick="window.location.href='@Url.Page("/DetailNewsArticle", new { id = mainArticle.NewsArticleId })'"
+					 data-id="@mainArticle.NewsArticleId">
+					<img src="@mainArticle.UrlThumbnails" class="card-img-top" style="height:350px; object-fit:cover;" />
+					<div class="card-body">
+						<h3 class="card-title fw-bold news-title">
+							@(mainArticle.NewsTitle?.Length > 60
+														? mainArticle.NewsTitle.Substring(0, 60) + "..."
+														: mainArticle.NewsTitle)
+						</h3>
+
+						<p class="text-muted mb-1">
+							@mainArticle.CreatedDate?.ToString("dd/MM/yyyy") -
+							<span class="text-muted">@mainArticle.CategoryName</span>
+						</p>
+
+						<p class="card-text">
+							@(mainArticle.NewsContent?.Length > 80
+														? mainArticle.NewsContent.Substring(0, 80) + "..."
+														: mainArticle.NewsContent)
+						</p>
+					</div>
+				</div>
 			</div>
 		}
 
@@ -49,8 +62,15 @@
 					 data-id="@news.NewsArticleId">
 					<img src="@news.UrlThumbnails" style="width:120px; height:80px; object-fit:cover;" class="me-3 rounded" />
 					<div>
-						<h6 class="mb-1 text-dark news-title">@news.NewsTitle</h6>
-						<small class="text-muted">@news.CreatedDate?.ToString("dd/MM/yyyy")</small>
+						<h6 class="mb-1 text-dark news-title">
+							@(news.NewsTitle?.Length > 60
+														? news.NewsTitle.Substring(0, 60) + "..."
+														: news.NewsTitle)
+						</h6>
+						<small class="text-muted">
+							@news.CreatedDate?.ToString("dd/MM/yyyy") -
+							<span class="text-muted">@news.CategoryName</span>
+						</small>
 					</div>
 				</div>
 			}
@@ -69,8 +89,15 @@
 					 data-id="@news.NewsArticleId">
 					<img src="@news.UrlThumbnails" style="width:120px; height:80px; object-fit:cover;" class="me-3 rounded" />
 					<div>
-						<h6 class="mb-1 text-dark news-title">@news.NewsTitle</h6>
-						<small class="text-muted">@news.CreatedDate?.ToString("dd/MM/yyyy")</small>
+						<h6 class="mb-1 text-dark news-title">
+							@(news.NewsTitle?.Length > 60
+														? news.NewsTitle.Substring(0, 60) + "..."
+														: news.NewsTitle)
+						</h6>
+						<small class="text-muted">
+							@news.CreatedDate?.ToString("dd/MM/yyyy") -
+							<span class="text-muted">@news.CategoryName</span>
+						</small>
 					</div>
 				</div>
 			</div>
@@ -84,7 +111,7 @@
 		const conn = new signalR.HubConnectionBuilder().withUrl("/newsHub").build();
 
 		conn.on("ReceiveNewsChange", function (action) {
-			if (action === "NewsApproved" || action === "deleted") {
+			if (action === "NewsApproved" || action === "deleted" || action === "edited") {
 				location.reload();
 			}
 		});

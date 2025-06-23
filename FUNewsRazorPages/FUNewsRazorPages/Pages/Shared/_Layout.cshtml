@@ -67,9 +67,17 @@
 						else
 						{
 							<li class="nav-item">
-								<form method="post" asp-page="/Account/Logout" class="d-inline">
+								<form method="post" asp-page="/Account/Logout" class="d-inline" onsubmit="handleLogout(event)">
 									<button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
 								</form>
+
+								<script>
+									function handleLogout(event) {
+										if (window.userHubConnection) {
+											window.userHubConnection.stop(); // Đóng kết nối SignalR
+										}
+									}
+								</script>
 							</li>
 						}
 					</ul>
@@ -94,5 +102,22 @@
 	<script src="~/js/site.js" asp-append-version="true"></script>
 
 	@await RenderSectionAsync("Scripts", required: false)
+
+	@if (Context.Session.GetString("AccountEmail") != null)
+	{
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+		<script>
+			const email = "@Context.Session.GetString("AccountEmail")";
+
+			const connection = new signalR.HubConnectionBuilder()
+				.withUrl(`/userhub?email=${email}`)
+				.build();
+
+			connection.start()
+				.then(() => console.log("✅ Connected to hub with email:", email))
+				.catch(err => console.error("❌ SignalR connection error:", err));
+		</script>
+	}
+
 </body>
 </html>

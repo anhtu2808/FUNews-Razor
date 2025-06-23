@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using FuNews.Modals.Entity;
 using FuNews.Modals.DTOs;
 using FuNews.Modals.DTOs.Request;
+using FUNewsRazorPages.SignalR.User;
 namespace FUNewsRazorPages
 {
     public class Program
@@ -17,7 +18,7 @@ namespace FUNewsRazorPages
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.WebHost.UseUrls("http://0.0.0.0:5000");
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddDbContext<FuNewsDbContext>(options =>
@@ -40,7 +41,6 @@ namespace FUNewsRazorPages
             builder.Services.AddScoped<INewsArticleService, NewsArticleService>();
             builder.Services.AddScoped<ITagService, TagService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
-            builder.Services.AddScoped<INewsHubService, NewsHubService>();
             builder.Services.AddScoped<IDashboardService, DashboardService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
 
@@ -83,7 +83,7 @@ namespace FUNewsRazorPages
                 app.UseHsts();
             }
             app.MapHub<NewsHub>("/newsHub");
-            app.MapHub<NewsHub>("/userHub");
+            app.MapHub<UserHub>("/userHub");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();

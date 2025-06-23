@@ -18,14 +18,12 @@ namespace FuNews.BLL.Service
     {
         private INewsArticleRepository _newsArticleRepository;
         private IMapper _mapper;
-        private INewsHubService _newHubService;
         private INewsTagRepository _newsTagRepository;
 
-        public NewsArticleService(INewsArticleRepository newsArticleRepository, IMapper mapper, INewsHubService newsHubService, INewsTagRepository newsTagRepository) : base(newsArticleRepository)
+        public NewsArticleService(INewsArticleRepository newsArticleRepository, IMapper mapper, INewsTagRepository newsTagRepository) : base(newsArticleRepository)
         {
             _newsArticleRepository = newsArticleRepository;
             _mapper = mapper;
-            _newHubService = newsHubService;
             _newsTagRepository = newsTagRepository;
         }
 
@@ -34,7 +32,7 @@ namespace FuNews.BLL.Service
             List<NewsArticleResponse> responses;
             if ((!status.HasValue && !categoryId.HasValue) || (status.HasValue && !categoryId.HasValue))
             {
-                responses = _mapper.Map<List<NewsArticleResponse>>(await _newsArticleRepository.GetAllAsync());
+                responses = _mapper.Map<List<NewsArticleResponse>>(await _newsArticleRepository.GetAllNews());
             }
             else
             {

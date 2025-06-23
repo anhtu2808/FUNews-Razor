@@ -24,9 +24,9 @@ namespace FUNewsRazorPages.Pages.Account
 			{
 				if (!string.IsNullOrEmpty(acc.AccountEmail))
 				{
-					acc.IsOnline = UserHub.OnlineUsers.Values.Contains(acc.AccountEmail);
-					// hoặc nếu bạn tách Dictionary riêng thì dùng: UserConnectionStore.OnlineUsers
-				}
+                    acc.IsOnline = UserHub.OnlineUsers.Values.Contains(acc.AccountEmail);
+                    // hoặc nếu bạn tách Dictionary riêng thì dùng: UserConnectionStore.OnlineUsers
+                }
 			}
 		}
 

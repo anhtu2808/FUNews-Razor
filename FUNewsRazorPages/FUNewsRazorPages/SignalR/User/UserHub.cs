@@ -1,34 +1,34 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System.Collections.Concurrent;
 
 namespace FUNewsRazorPages.SignalR.User
 {
     public class UserHub : Hub
     {
-        public static readonly Dictionary<string, string> OnlineUsers = new();
+        public static readonly ConcurrentDictionary<string, string> OnlineUsers = new();
 
-        public override Task OnConnectedAsync()
+        public override async Task OnConnectedAsync()
         {
             var httpContext = Context.GetHttpContext();
-            var email = httpContext?.Session.GetString("AccountEmail");
+            var email = httpContext?.Request.Query["email"].ToString();
 
             if (!string.IsNullOrEmpty(email))
             {
                 OnlineUsers[Context.ConnectionId] = email;
-                Clients.All.SendAsync("UserStatusChanged", email, true);
+                await Clients.All.SendAsync("UserStatusChanged", email, true); // ✅ thêm await
             }
 
-            return base.OnConnectedAsync();
+            await base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnectedAsync(Exception? exception)
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            if (OnlineUsers.TryGetValue(Context.ConnectionId, out var email))
+            if (OnlineUsers.TryRemove(Context.ConnectionId, out var email))
             {
-                OnlineUsers.Remove(Context.ConnectionId);
-                Clients.All.SendAsync("UserStatusChanged", email, false);
+                await Clients.All.SendAsync("UserStatusChanged", email, false); // ✅ thêm await
             }
 
-            return base.OnDisconnectedAsync(exception);
+            await base.OnDisconnectedAsync(exception);
         }
     }
 }

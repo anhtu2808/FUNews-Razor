@@ -23,5 +23,7 @@ namespace FuNews.DAL.Interface
 
         Task<List<NewsArticle>> GetPendingNews();
         Task<List<NewsArticle>> GetOwnedNews(short accountId);
-    }
+
+		Task<List<NewsArticle>> GetAllNews();
+	}
 }

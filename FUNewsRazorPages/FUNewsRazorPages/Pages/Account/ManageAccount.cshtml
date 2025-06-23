@@ -1,49 +1,69 @@
 ﻿@page
 @model FUNewsRazorPages.Pages.Account.ManageAccountModel
 @{
-    ViewData["Title"] = "Quản lý tài khoản";
+	ViewData["Title"] = "Quản lý tài khoản";
 }
 
 <div class="container mt-5">
-    <h2 class="mb-4 text-primary fw-bold">Quản lý tài khoản</h2>
+	<h2 class="mb-4 text-primary fw-bold">Quản lý tài khoản</h2>
 
-    <table class="table table-bordered table-hover align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>Tên tài khoản</th>
-                <th>Email</th>
-                <th>Vai trò</th>
-                <th>Trạng thái</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Accounts != null && Model.Accounts.Any())
-            {
-                foreach (var acc in Model.Accounts)
-                {
-                    <tr>
-                        <td>@acc.AccountName</td>
-                        <td>@acc.AccountEmail</td>
-                        <td>@Model.GetRoleName(acc.AccountRole)</td>
-                        <td>
-                            @if (acc.IsOnline)
-                            {
-                                <span class="badge bg-success">Online</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">Offline</span>
-                            }
-                        </td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="4" class="text-center text-muted">Không có tài khoản nào.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+	<table class="table table-bordered table-hover align-middle">
+		<thead class="table-light">
+			<tr>
+				<th>Tên tài khoản</th>
+				<th>Email</th>
+				<th>Vai trò</th>
+				<th>Trạng thái</th>
+			</tr>
+		</thead>
+		<tbody>
+			@if (Model.Accounts != null && Model.Accounts.Any())
+			{
+				foreach (var acc in Model.Accounts)
+				{
+					<tr data-email="@acc.AccountEmail">
+						<td>@acc.AccountName</td>
+						<td>@acc.AccountEmail</td>
+						<td>@Model.GetRoleName(acc.AccountRole)</td>
+						<td>
+							<span class="badge @(acc.IsOnline ? "bg-success" : "bg-secondary") status-badge">
+								@(acc.IsOnline ? "Online" : "Offline")
+							</span>
+						</td>
+					</tr>
+				}
+			}
+			else
+			{
+				<tr>
+					<td colspan="4" class="text-center text-muted">Không có tài khoản nào.</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 </div>
+
+@section Scripts {
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+	<script>
+		const email = "@HttpContext.Session.GetString("AccountEmail")";
+
+		const connection = new signalR.HubConnectionBuilder()
+			.withUrl(`/userhub?email=${email}`)
+			.build();
+
+		connection.start()
+			.then(() => console.log("Connected to UserHub"))
+			.catch(err => console.error(err.toString()));
+		connection.on("UserStatusChanged", (changedEmail, isOnline) => {
+			const row = document.querySelector(`[data-email="${changedEmail}"]`);
+			if (row) {
+				const badge = row.querySelector(".status-badge");
+				if (badge) {
+					badge.className = "badge " + (isOnline ? "bg-success" : "bg-secondary") + " status-badge";
+					badge.textContent = isOnline ? "Online" : "Offline";
+				}
+			}
+		});
+	</script>
+}
