@@ -5,6 +5,7 @@ using FuNews.DAL.Interface;
 using FuNews.DAL.Repository;
 using FuNews.Modals.Mapping;
 using FUNewsRazorPages.SignalR.NewsArticle;
+using FUNewsRazorPages.SignalR.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using FuNews.Modals.Entity;
@@ -83,7 +84,7 @@ namespace FUNewsRazorPages
                 app.UseHsts();
             }
             app.MapHub<NewsHub>("/newsHub");
-            app.MapHub<NewsHub>("/userHub");
+            app.MapHub<UserHub>("/userHub");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();

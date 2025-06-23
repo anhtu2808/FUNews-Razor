@@ -124,6 +124,6 @@ namespace FuNews.BLL.Service
                 AccountEmail = account.AccountEmail,
                 AccountRole = account.AccountRole
             };
-        }
+		}
 	}
 }

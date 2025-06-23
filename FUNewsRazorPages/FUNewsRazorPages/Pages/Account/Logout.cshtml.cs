@@ -8,6 +8,9 @@ namespace FUNewsRazorPages.Pages.Account
     {
 		public async Task<IActionResult> OnPostAsync()
 		{
+			// Clear session data
+			HttpContext.Session.Clear();
+			
 			await HttpContext.SignOutAsync("Cookies");
 			return RedirectToPage("/Index");
 		}

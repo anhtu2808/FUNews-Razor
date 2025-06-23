@@ -4,31 +4,83 @@ namespace FUNewsRazorPages.SignalR.User
 {
     public class UserHub : Hub
     {
-        public static readonly Dictionary<string, string> OnlineUsers = new();
+        // Map: ConnectionId -> Email
+        public static readonly Dictionary<string, string> ConnectionUsers = new();
+        
+        // Map: Email -> List of ConnectionIds (support multiple tabs/browsers)
+        public static readonly Dictionary<string, HashSet<string>> UserConnections = new();
 
-        public override Task OnConnectedAsync()
+        public override async Task OnConnectedAsync()
         {
+            // Get email from query string instead of session
             var httpContext = Context.GetHttpContext();
-            var email = httpContext?.Session.GetString("AccountEmail");
+            var email = httpContext?.Request.Query["email"].ToString();
+
+            Console.WriteLine($"=== UserHub: Connection attempt ===");
+            Console.WriteLine($"ConnectionId: {Context.ConnectionId}");
+            Console.WriteLine($"Email from query: '{email}'");
 
             if (!string.IsNullOrEmpty(email))
             {
-                OnlineUsers[Context.ConnectionId] = email;
-                Clients.All.SendAsync("UserStatusChanged", email, true);
+                // Add connection mapping
+                ConnectionUsers[Context.ConnectionId] = email;
+                
+                // Add to user connections set
+                if (!UserConnections.ContainsKey(email))
+                {
+                    UserConnections[email] = new HashSet<string>();
+                }
+                UserConnections[email].Add(Context.ConnectionId);
+                
+                Console.WriteLine($"User {email} connected. Total connections: {UserConnections[email].Count}");
+                
+                // Notify all clients that user is online
+                await Clients.All.SendAsync("UserStatusChanged", email, true);
             }
 
-            return base.OnConnectedAsync();
+            await base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnectedAsync(Exception? exception)
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            if (OnlineUsers.TryGetValue(Context.ConnectionId, out var email))
+            Console.WriteLine($"=== UserHub: Disconnection ===");
+            Console.WriteLine($"ConnectionId: {Context.ConnectionId}");
+
+            if (ConnectionUsers.TryGetValue(Context.ConnectionId, out var email))
             {
-                OnlineUsers.Remove(Context.ConnectionId);
-                Clients.All.SendAsync("UserStatusChanged", email, false);
+                // Remove connection mapping
+                ConnectionUsers.Remove(Context.ConnectionId);
+                
+                // Remove from user connections set
+                if (UserConnections.ContainsKey(email))
+                {
+                    UserConnections[email].Remove(Context.ConnectionId);
+                    
+                    Console.WriteLine($"User {email} disconnected. Remaining connections: {UserConnections[email].Count}");
+                    
+                    // If user has no more connections, mark as offline
+                    if (UserConnections[email].Count == 0)
+                    {
+                        UserConnections.Remove(email);
+                        Console.WriteLine($"User {email} is now offline");
+                        await Clients.All.SendAsync("UserStatusChanged", email, false);
+                    }
+                }
             }
 
-            return base.OnDisconnectedAsync(exception);
+            await base.OnDisconnectedAsync(exception);
+        }
+        
+        // Helper method to check if user is online
+        public static bool IsUserOnline(string email)
+        {
+            return UserConnections.ContainsKey(email) && UserConnections[email].Count > 0;
+        }
+
+        // Get all online users
+        public static List<string> GetOnlineUsers()
+        {
+            return UserConnections.Keys.ToList();
         }
     }
 }

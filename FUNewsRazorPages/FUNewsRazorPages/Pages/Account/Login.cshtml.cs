@@ -49,7 +49,13 @@ namespace FUNewsRazorPages.Pages.Account
 
             await HttpContext.SignInAsync("Cookies", principal);
 
+            // Set session data for SignalR
             HttpContext.Session.SetString("AccountEmail", user.AccountEmail);
+            HttpContext.Session.SetString("Role", user.AccountRole.ToString());
+            
+            // Set TempData to trigger SignalR connection
+            TempData["LoginSuccess"] = true;
+            
             return RedirectToPage("/Index");
         }
     }

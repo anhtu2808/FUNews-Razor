@@ -24,4 +24,35 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Connect to UserHub after successful login
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check if user just logged in successfully
+            if ('@TempData["LoginSuccess"]' === 'True') {
+                const email = "@HttpContext.Session.GetString("AccountEmail")";
+                const role = "@HttpContext.Session.GetString("Role")";
+                
+                if (email && window.userHubManager) {
+                    try {
+                        // Connect to UserHub
+                        await window.userHubManager.connect(email);
+                        console.log("Connected to UserHub after login");
+                        
+                        // Redirect to appropriate page after connection
+                        if (role === "3") {
+                            window.location.href = "/Admin/Dashboard";
+                        } else if (role === "2") {
+                            window.location.href = "/NewsArticle/ManageNews";
+                        } else {
+                            window.location.href = "/";
+                        }
+                    } catch (err) {
+                        console.error("Failed to connect to UserHub:", err);
+                        // Redirect anyway
+                        window.location.href = "/";
+                    }
+                }
+            }
+        });
+    </script>
 }
