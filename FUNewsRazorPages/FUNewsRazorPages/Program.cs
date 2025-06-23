@@ -18,9 +18,9 @@ namespace FUNewsRazorPages
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            builder.Services.AddRazorPages();
+			builder.WebHost.UseUrls("http://0.0.0.0:5000");
+			// Add services to the container.
+			builder.Services.AddRazorPages();
             builder.Services.AddDbContext<FuNewsDbContext>(options =>
              options.UseSqlServer(
                  builder.Configuration.GetConnectionString("DefaultConnection")
